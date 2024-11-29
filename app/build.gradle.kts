@@ -40,6 +40,8 @@ android {
 
 dependencies {
 
+    implementation("androidx.cardview:cardview:1.0.0")
+
     implementation(libs.material)
     testImplementation(libs.junit)
 

@@ -3,4 +3,8 @@
     <string name="title_home">Home</string>
     <string name="title_discover">Discover</string>
     <string name="title_profile">Profile</string>
+    <string name="icon_description_discover">Discover Icon</string>
+    <string name="search">Search</string>
+    <string name="discover">Discover</string>
+    <string name="discovery_category">discovery category icon</string>
 </resources>
