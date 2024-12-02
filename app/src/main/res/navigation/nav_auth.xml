@@ -2,21 +2,19 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_auth.xml"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/navigation_login">
 
     <fragment
-        android:id="@+id/loginFragment"
+        android:id="@+id/navigation_login"
         android:name="com.example.schoolimpact.ui.auth.login.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            android:id="@+id/action_navigation_login_to_navigation_registration"
+            app:destination="@id/navigation_registration" />
     </fragment>
+
     <fragment
-        android:id="@+id/registerFragment"
+        android:id="@+id/navigation_registration"
         android:name="com.example.schoolimpact.ui.auth.register.RegisterFragment"
-        android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
 </navigation>

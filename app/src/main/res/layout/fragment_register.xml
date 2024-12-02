@@ -2,13 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/registerFragment"
+    android:id="@+id/navigation_registration"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.auth.register.RegisterFragment">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_register_form"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
@@ -41,19 +40,20 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 app:endIconMode="clear_text"
+                app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/placeholder_name">
 
                 <EditText
-                    android:id="@+id/ed_name"
+                    android:id="@+id/et_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress|text"
-                    android:selectAllOnFocus="true" />
+                    android:autofillHints="name"
+                    android:hint="@string/prompt_name"
+                    android:inputType="textEmailAddress|text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,17 +71,21 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 app:endIconMode="clear_text"
+                app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/placeholder_email">
 
                 <EditText
-                    android:id="@+id/ed_email"
+                    android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints="emailAddress"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress|text"
                     android:selectAllOnFocus="true" />
@@ -103,9 +107,12 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/education_level_dropdown_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 app:endIconMode="dropdown_menu"
+                app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/placeholder_education_level">
@@ -113,9 +120,13 @@
                 <AutoCompleteTextView
                     android:id="@+id/education_level_dropdown"
                     android:layout_width="match_parent"
-                    android:paddingStart="16dp"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
                     android:hint="@string/placeholder_education"
-                    android:layout_height="match_parent" />
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -138,15 +149,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:endIconMode="clear_text"
+                app:endIconMode="password_toggle"
+                app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/placeholder_password">
 
                 <EditText
-                    android:id="@+id/ed_password"
+                    android:id="@+id/et_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints="password"
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
                     android:selectAllOnFocus="true" />
@@ -155,14 +168,13 @@
 
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_register"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:backgroundTint="@color/button_color"
-                android:text="@string/title_sign_in"
+                android:text="@string/title_sign_up"
                 app:cornerRadius="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -172,28 +184,28 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_to_login"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/button_color"
-        android:text="@string/title_sign_up"
-        app:cornerRadius="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <!--    <com.google.android.material.button.MaterialButton-->
+    <!--        android:id="@+id/btn_to_login"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="32dp"-->
+    <!--        android:layout_marginEnd="32dp"-->
+    <!--        android:layout_marginBottom="24dp"-->
+    <!--        android:backgroundTint="@color/button_color"-->
+    <!--        android:text="@string/title_sign_up"-->
+    <!--        app:cornerRadius="4dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
 
-    <TextView
-        android:id="@+id/tv_already_have_an_account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/tv_already_have_an_account"
-        app:layout_constraintBottom_toTopOf="@+id/btn_to_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_already_have_an_account"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginBottom="8dp"-->
+    <!--        android:text="@string/tv_already_have_an_account"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/btn_to_login"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
