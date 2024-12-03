@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.schoolimpact.data.repository.AuthRepository
 import com.example.schoolimpact.di.Injection
 import com.example.schoolimpact.ui.auth.AuthViewModel
+import com.example.schoolimpact.ui.auth.login.LoginViewModel
 
 class ViewModelFactory private constructor(
     private val authRepository: AuthRepository,
@@ -19,6 +20,10 @@ class ViewModelFactory private constructor(
         return when {
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> {
                 AuthViewModel(authRepository) as T
+            }
+
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
+                LoginViewModel(authRepository) as T
             }
 
             else -> null

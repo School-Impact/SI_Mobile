@@ -1,14 +1,14 @@
 package com.example.schoolimpact.data.repository
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import com.example.schoolimpact.data.api.ApiService
 import com.example.schoolimpact.data.model.ErrorResponse
 import com.example.schoolimpact.data.model.User
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.utils.Result
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import okio.IOException
 import retrofit2.HttpException
 
@@ -16,7 +16,7 @@ class AuthRepository private constructor(
     private val apiService: ApiService, private val authDataSource: AuthDataSource
 ) {
 
-    fun login(email: String, password: String): LiveData<Result<User>> = liveData {
+    fun login(email: String, password: String): Flow<Result<User>> = flow {
         emit(Result.Loading)
         try {
             val response = apiService.login(email, password).loginResult
@@ -37,7 +37,7 @@ class AuthRepository private constructor(
 
     fun register(
         name: String, email: String, educationLevel: String, password: String
-    ): LiveData<Result<String>> = liveData {
+    ): Flow<Result<String>> = flow {
         emit(Result.Loading)
         try {
             val message = apiService.register(name, email, educationLevel, password).message
