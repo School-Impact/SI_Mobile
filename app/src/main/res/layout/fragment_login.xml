@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.auth.login.LoginFragment">
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardLoginForm"
         android:layout_width="0dp"
@@ -152,5 +153,25 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_to_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

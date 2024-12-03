@@ -1,6 +1,7 @@
 package com.example.schoolimpact.ui.auth.login
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,11 +11,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.schoolimpact.MainActivity
 import com.example.schoolimpact.R
 import com.example.schoolimpact.ViewModelFactory
 import com.example.schoolimpact.databinding.FragmentLoginBinding
 import com.example.schoolimpact.ui.auth.AuthViewModel
+import com.example.schoolimpact.ui.auth.ValidationResult
+import com.example.schoolimpact.utils.Result
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
@@ -36,18 +43,21 @@ class LoginFragment : Fragment() {
         val factory = ViewModelFactory.getInstance(requireActivity())
         authViewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
 
-        // Initialize real-time validation
-        setupRealTimeValidation()
+        setupFieldValidation()
 
-        // Set up button click listeners
+        val userEmail = binding.etEmail.text.toString()
+        val userPassword = binding.etPassword.text.toString()
+
         binding.btnLogin.setOnClickListener {
-            when (val result = validateForm()) {
-                is ValidationResult.Success -> performLogin()
-                is ValidationResult.Error -> shakeError(binding.cardLoginForm, result.message)
+            when (val result = validateForm(userEmail, userPassword)) {
+                is ValidationResult.Success -> login(userEmail, userPassword)
+                is ValidationResult.Error -> showValidationErrorWithAnimation(
+                    binding.cardLoginForm, result.message
+                )
             }
         }
 
-        binding.btnLogin.setOnClickListener { validateForm() }
+        binding.btnLogin.setOnClickListener { validateForm(userEmail, userPassword) }
 
         binding.btnToRegister.setOnClickListener {
             findNavController().navigate(R.id.action_navigation_login_to_navigation_registration)
@@ -55,7 +65,19 @@ class LoginFragment : Fragment() {
 
     }
 
-    private fun setupRealTimeValidation() {
+    override fun onResume() {
+        super.onResume()
+        binding.etEmail.text.clear()
+        binding.etPassword.text.clear()
+        clearValidationErrors()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setupFieldValidation() {
         binding.etEmail.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -95,28 +117,28 @@ class LoginFragment : Fragment() {
         })
     }
 
-    private fun validateForm(): ValidationResult {
-        val email = binding.etEmail.text.toString()
-        val password = binding.etPassword.text.toString()
+    private fun validateForm(email: String, password: String): ValidationResult {
 
         return when {
             email.isEmpty() -> {
-                shakeError(binding.etEmail, "Email cannot be empty")
+                showValidationErrorWithAnimation(binding.etEmail, "Email cannot be empty")
                 ValidationResult.Error("Email cannot be empty")
             }
 
             !isValidEmail(email) -> {
-                shakeError(binding.emailInputLayout, "Invalid email format")
+                showValidationErrorWithAnimation(binding.emailInputLayout, "Invalid email format")
                 ValidationResult.Error("Invalid email format")
             }
 
             password.isEmpty() -> {
-                shakeError(binding.etPassword, "Password cannot be empty")
+                showValidationErrorWithAnimation(binding.etPassword, "Password cannot be empty")
                 ValidationResult.Error("Password cannot be empty")
             }
 
             !validatePassword(password) -> {
-                shakeError(binding.etPassword, "Password requirements not met")
+                showValidationErrorWithAnimation(
+                    binding.etPassword, "Password requirements not met"
+                )
                 ValidationResult.Error("Password requirements not met")
             }
 
@@ -137,8 +159,8 @@ class LoginFragment : Fragment() {
         }
     }
 
-
-    private fun shakeError(view: View, message: String) {
+    // Shake Animations
+    private fun showValidationErrorWithAnimation(view: View, message: String) {
         view.requestFocus()
         val shake = ObjectAnimator.ofFloat(
             view, "translationX", 0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f
@@ -148,15 +170,51 @@ class LoginFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun performLogin() {
-        // Perform login action here
-        Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+    private fun login(email: String, password: String) {
+        authViewModel.login(email, password).observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> {
+                        showLoading(true)
+                    }
+
+                    is Result.Success -> {
+                        showLoading(false)
+                        val user = result.data
+
+                        showSnackBar(getString(R.string.success_login))
+                        lifecycleScope.launch {
+                            authViewModel.saveUser(user)
+                        }
+
+                        // Navigate to MainActivity
+                        val intent = Intent(context, MainActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+
+                    }
+
+                    is Result.Error -> {
+                        showLoading(false)
+                        showSnackBar("Error: ${result.error}")
+                    }
+                }
+            }
+        }
     }
 
+    private fun showLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 
-    sealed class ValidationResult {
-        data object Success : ValidationResult()
-        data class Error(val message: String) : ValidationResult()
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun clearValidationErrors() {
+        binding.emailInputLayout.error = null
+        binding.passwordInputLayout.error = null
     }
 
 }

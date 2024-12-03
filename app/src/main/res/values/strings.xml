@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SchoolImpact</string>
+    <string name="app_name">School Impact</string>
     <string name="title_home">Home</string>
     <string name="title_discover">Discover</string>
     <string name="title_profile">Profile</string>
@@ -17,5 +17,14 @@
     <string name="placeholder_name">Name</string>
     <string name="education_level">Education Level</string>
     <string name="placeholder_education">Select Option</string>
+    <string name="action_sign_in">Sign in or register</string>
     <string name="prompt_name">John Doe</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="success_login">Login Successfully</string>
+    <string name="login_failed">"Login failed"</string>
+
+
 </resources>

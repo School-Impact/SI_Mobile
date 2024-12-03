@@ -4,12 +4,16 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.schoolimpact.data.api.ApiService
+import com.example.schoolimpact.data.model.ErrorResponse
 import com.example.schoolimpact.data.model.User
+import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.utils.Result
+import com.google.gson.Gson
 import okio.IOException
+import retrofit2.HttpException
 
 class AuthRepository private constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService, private val authDataSource: AuthDataSource
 ) {
 
     fun login(email: String, password: String): LiveData<Result<User>> = liveData {
@@ -31,7 +35,31 @@ class AuthRepository private constructor(
         }
     }
 
-//    suspend fun logout() = loginDataSource.logout()
+    fun register(
+        name: String, email: String, educationLevel: String, password: String
+    ): LiveData<Result<String>> = liveData {
+        emit(Result.Loading)
+        try {
+            val message = apiService.register(name, email, educationLevel, password).message
+            emit(Result.Success(message))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+            Log.e(TAG, "Register : $errorMessage")
+        } catch (e: IOException) {
+            emit(Result.Error("No Internet Connection"))
+            Log.e(TAG, "Register : ${e.localizedMessage}")
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+            Log.e(TAG, "Register : ${e.localizedMessage}")
+        }
+    }
+
+    suspend fun saveUser(user: User) = authDataSource.saveUser(user)
+
+    suspend fun logout() = authDataSource.logout()
 
 
     companion object {
@@ -40,9 +68,9 @@ class AuthRepository private constructor(
         @Volatile
         private var instance: AuthRepository? = null
         fun getInstance(
-            apiService: ApiService
+            apiService: ApiService, authDataSource: AuthDataSource
         ): AuthRepository = instance ?: synchronized(this) {
-            instance ?: AuthRepository(apiService)
+            instance ?: AuthRepository(apiService, authDataSource)
         }.also { instance = it }
     }
 }

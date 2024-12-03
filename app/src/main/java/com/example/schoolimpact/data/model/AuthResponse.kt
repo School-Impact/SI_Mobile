@@ -6,7 +6,7 @@ data class RegisterResponse(
 
     @field:SerializedName("error") val error: Boolean? = false,
 
-    @field:SerializedName("message") val message: String? = null
+    @field:SerializedName("message") val message: String
 )
 
 
