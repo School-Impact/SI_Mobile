@@ -1,4 +1,4 @@
-package com.example.schoolimpact.ui.auth.login
+package com.example.schoolimpact.ui.auth.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,10 +11,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel() {
+
+    private val _nameState = MutableStateFlow<ValidationState>(ValidationState.Initial)
+    val nameState = _nameState.asStateFlow()
 
     private val _emailState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val emailState = _emailState.asStateFlow()
@@ -22,12 +24,13 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _passwordState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val passwordState = _passwordState.asStateFlow()
 
-    private val _loginState = MutableStateFlow<AuthState<User>>(AuthState.Initial)
-    val loginState = _loginState.asStateFlow()
+    private val _registerState = MutableStateFlow<AuthState<User>>(AuthState.Initial)
+    val registerState = _registerState.asStateFlow()
 
     private val _showErrorAnimation = MutableSharedFlow<String>()
     val showErrorAnimation = _showErrorAnimation.asSharedFlow()
 
+    private var currentName = ""
     private var currentEmail = ""
     private var currentPassword = ""
 
@@ -41,19 +44,18 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
         _passwordState.value = validatePassword(password)
     }
 
-
-    fun login() {
+    fun register() {
         viewModelScope.launch {
             if (!validateCredentials()) {
                 handleError("Invalid credentials")
                 return@launch
             }
-            _loginState.value = AuthState.Loading
+            _registerState.value = AuthState.Loading
             try {
                 authRepository.login(currentEmail, currentPassword).catch { e ->
-                    _loginState.value = AuthState.Error(e.message.toString())
-                }.collectLatest { user ->
-                    _loginState.value = AuthState.Success(user)
+                    _registerState.value = AuthState.Error(e.message.toString())
+                }.collect { user ->
+                    _registerState.value = AuthState.Success(user)
                 }
             } catch (e: Exception) {
                 handleError(e.message.toString())
@@ -62,14 +64,24 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     }
 
     private fun validateCredentials(): Boolean {
+        val nameValidation = validateName(currentName)
         val emailValidation = validateEmail(currentEmail)
         val passwordValidation = validatePassword(currentPassword)
 
+        _nameState.value = nameValidation
         _emailState.value = emailValidation
         _passwordState.value = passwordValidation
 
-        return emailValidation is ValidationState.Valid && passwordValidation is ValidationState.Valid
+        return nameValidation is ValidationState.Valid && emailValidation is ValidationState.Valid && passwordValidation is ValidationState.Valid
     }
+
+    private fun validateName(name: String): ValidationState {
+        return when {
+            name.isBlank() -> ValidationState.Invalid("Name cannot be empty")
+            else -> ValidationState.Valid
+        }
+    }
+
 
     private fun validateEmail(email: String): ValidationState {
         return when {
@@ -90,10 +102,10 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    private fun handleError(error: String) {
+    private fun handleError(message: String) {
         viewModelScope.launch {
-            _loginState.value = AuthState.Error(error)
-            _showErrorAnimation.emit(error)
+            _registerState.value = AuthState.Error(message)
+            _showErrorAnimation.emit(message)
         }
     }
 

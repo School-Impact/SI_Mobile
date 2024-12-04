@@ -6,7 +6,7 @@ import com.example.schoolimpact.data.model.User
 import com.example.schoolimpact.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 
-class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class uthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     fun login(email: String, password: String) = authRepository.login(email, password)
 

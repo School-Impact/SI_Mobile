@@ -7,6 +7,7 @@ import com.example.schoolimpact.data.model.User
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.utils.Result
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okio.IOException
@@ -16,22 +17,49 @@ class AuthRepository private constructor(
     private val apiService: ApiService, private val authDataSource: AuthDataSource
 ) {
 
+//    fun login(email: String, password: String): Flow<Result<User>> = flow {
+//        emit(Result.Loading)
+//        try {
+//            val response = apiService.login(email, password).loginResult
+//            val user = User(
+//                userId = response?.userId.toString(),
+//                name = response?.name.toString(),
+//                token = response?.token.toString()
+//            )
+//            emit(Result.Success(user))
+//        } catch (e: IOException) {
+//            emit(Result.Error("No Internet Connection"))
+//            Log.e(TAG, "Login : ${e.localizedMessage}")
+//        } catch (e: Exception) {
+//            Log.e(TAG, "Login : ${e.message.toString()}")
+//            emit(Result.Error(e.message.toString()))
+//        }
+//    }
+
+    //untuk testing
     fun login(email: String, password: String): Flow<Result<User>> = flow {
         emit(Result.Loading)
         try {
-            val response = apiService.login(email, password).loginResult
-            val user = User(
-                userId = response?.userId.toString(),
-                name = response?.name.toString(),
-                token = response?.token.toString()
-            )
-            emit(Result.Success(user))
-        } catch (e: IOException) {
-            emit(Result.Error("No Internet Connection"))
-            Log.e(TAG, "Login : ${e.localizedMessage}")
+            // Simulate network delay
+            delay(1000)
+
+            // Dummy User for testing
+            val dummyEmail = "test@example.com"
+            val dummyPassword = "password123"
+
+            if (email == dummyEmail && password == dummyPassword) {
+                val dummyUser = User(
+                    userId = "12345",
+                    name = "Test User",
+                    token = "dummy_token_12345"
+                )
+                emit(Result.Success(dummyUser))
+            } else {
+                emit(Result.Error("Invalid credentials"))
+            }
         } catch (e: Exception) {
-            Log.e(TAG, "Login : ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
+            Log.e(TAG, "Login : ${e.message.toString()}")
         }
     }
 

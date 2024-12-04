@@ -16,8 +16,10 @@ import com.example.schoolimpact.MainActivity
 import com.example.schoolimpact.R
 import com.example.schoolimpact.ViewModelFactory
 import com.example.schoolimpact.databinding.FragmentLoginBinding
+import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -99,22 +101,28 @@ class LoginFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             loginViewModel.loginState.collect { state ->
                 when (state) {
-                    is LoginState.Loading -> showLoading(true)
-                    is LoginState.Success -> {
+                    is AuthState.Initial -> Unit
+                    is AuthState.Loading -> showLoading(true)
+                    is AuthState.Success -> {
                         showLoading(false)
                         showSnackBar(getString(R.string.success_login))
                         navigateToMain()
                     }
 
-                    is LoginState.Error -> {
+                    is AuthState.Error -> {
                         showLoading(false)
                         showErrorAnimations(
-                            binding.cardLoginForm, state.message.toString()
+                            binding.cardLoginForm, state.error
                         )
                     }
 
-                    else -> showLoading(false)
                 }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            loginViewModel.showErrorAnimation.collect { error ->
+                showErrorAnimations(binding.cardLoginForm, error)
             }
         }
     }
