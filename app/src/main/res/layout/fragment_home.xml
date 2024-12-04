@@ -161,7 +161,7 @@
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:scaleType="centerInside"
-                android:adjustViewBounds="true"
+            android:adjustViewBounds="true"
                 android:contentDescription="@string/discovery_category"
                 android:src="@drawable/ic_category" />
         </GridLayout>

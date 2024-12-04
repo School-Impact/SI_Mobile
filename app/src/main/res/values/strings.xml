@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SchoolImpact</string>
+    <string name="app_name">School Impact</string>
     <string name="title_home">Home</string>
     <string name="title_discover">Discover</string>
     <string name="title_profile">Profile</string>
@@ -7,4 +7,24 @@
     <string name="search">Search</string>
     <string name="discover">Discover</string>
     <string name="discovery_category">discovery category icon</string>
+    <string name="placeholder_password">Password</string>
+    <string name="placeholder_email">Email</string>
+    <string name="prompt_email">example@gmail.com</string>
+    <string name="prompt_password">…</string>
+    <string name="tv_forget_password"><u>Forget Password?</u></string>
+    <string name="placeholder_toolbar_title">Title</string>
+    <string name="title_sign_in">Sign In</string>
+    <string name="title_sign_up">Sign Up</string>
+    <string name="tv_no_account_yet">If you don\'t have an account yet?</string>
+    <string name="placeholder_name">Name</string>
+    <string name="education_level">Education Level</string>
+    <string name="placeholder_education">Select Option</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="prompt_name">John Doe</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="success_login">Login Successfully</string>
+    <string name="login_failed">"Login failed"</string>
 </resources>

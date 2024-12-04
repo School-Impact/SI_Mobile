@@ -4,14 +4,12 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.schoolimpact.data.repository.AuthRepository
-import com.example.schoolimpact.data.repository.MajorRepository
 import com.example.schoolimpact.di.Injection
 import com.example.schoolimpact.ui.auth.login.LoginViewModel
 import com.example.schoolimpact.ui.auth.register.RegisterViewModel
 
 class ViewModelFactory private constructor(
     private val authRepository: AuthRepository,
-    private val majorRepository: MajorRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return createViewModel(modelClass)
@@ -39,7 +37,6 @@ class ViewModelFactory private constructor(
         fun getInstance(context: Context): ViewModelFactory = instance ?: synchronized(this) {
             instance ?: ViewModelFactory(
                 Injection.provideAuthRepository(context),
-                Injection.provideMajorRepository(),
             )
         }.also { instance = it }
     }
