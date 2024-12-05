@@ -30,7 +30,7 @@ class AuthRepository private constructor(
             )
             emit(Result.Success(user))
         } catch (e: HttpException) {
-            val errorResult = parseHttpException(e, TAG)
+            val errorResult = parseHttpException(e)
             emit(errorResult)
         } catch (e: IOException) {
             emit(Result.Error("No Internet Connection"))
@@ -60,7 +60,7 @@ class AuthRepository private constructor(
             ).message
             emit(Result.Success(response))
         } catch (e: HttpException) {
-            val errorResult = parseHttpException(e, TAG)
+            val errorResult = parseHttpException(e)
             emit(errorResult)
         } catch (e: IOException) {
             emit(Result.Error("No Internet Connection"))
@@ -84,7 +84,7 @@ class AuthRepository private constructor(
             emit(Result.Success(response.message))
 
         } catch (e: HttpException) {
-            val errorResult = parseHttpException(e, TAG)
+            val errorResult = parseHttpException(e)
             emit(errorResult)
         } catch (e: IOException) {
             emit(Result.Error("No Internet Connection"))
@@ -95,7 +95,7 @@ class AuthRepository private constructor(
         }
     }
 
-    private fun parseHttpException(e: HttpException, tag: String): Result.Error {
+    private fun parseHttpException(e: HttpException): Result.Error {
         val errorCode = e.code() // Retrieves the HTTP status code
         val jsonInString = e.response()?.errorBody()?.string()
         val errorBody = try {
@@ -105,7 +105,7 @@ class AuthRepository private constructor(
         }
 
         val errorMessage = errorBody?.message ?: "Unknown error"
-        Log.e(tag, "HTTP Exception [$errorCode]: $errorMessage")
+        Log.e(TAG, "HTTP Exception [$errorCode]: $errorMessage")
         return Result.Error(errorMessage)
     }
 

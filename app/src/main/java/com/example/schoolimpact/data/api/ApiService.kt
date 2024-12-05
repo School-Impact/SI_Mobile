@@ -40,7 +40,7 @@ interface ApiService {
     @Multipart
     suspend fun getMajorList(
         @Header("Authorization") token: String,
-        @Query("category") category: String? = null
+        @Query("category") category: String
     ): MajorResponse
 
 }

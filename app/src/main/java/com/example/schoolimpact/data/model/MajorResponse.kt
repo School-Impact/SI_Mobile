@@ -1,6 +1,8 @@
 package com.example.schoolimpact.data.model
 
+import android.bluetooth.BluetoothClass.Device.Major
 import android.os.Parcelable
+import com.example.schoolimpact.data.api.ApiService
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -8,14 +10,14 @@ import kotlinx.parcelize.Parcelize
 data class MajorResponse(
 
     @field:SerializedName("data")
-    val data: List<MajorItem?>? = null,
+    val data: List<MajorListItem>,
 
     @field:SerializedName("message")
     val message: String? = null
 ) : Parcelable
 
 @Parcelize
-data class MajorItem(
+data class MajorListItem(
 
     @field:SerializedName("id")
     val id: Int? = null,
