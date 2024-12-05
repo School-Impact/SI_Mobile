@@ -4,7 +4,6 @@ import com.example.schoolimpact.data.model.EmailResponse
 import com.example.schoolimpact.data.model.LoginResponse
 import com.example.schoolimpact.data.model.RegisterResponse
 import okhttp3.RequestBody
-import retrofit2.http.Field
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -13,18 +12,19 @@ import retrofit2.http.Part
 interface ApiService {
     @Headers("Accept: application/json")
     @Multipart
-    @POST("register")
+    @POST("auth/dataRegister")
     suspend fun register(
-        @Field("name") name: String,
-        @Field("email") email: String,
-        @Field("education_level") educationLevel: String,
-        @Field("password") password: String
+        @Part("name") name: RequestBody,
+        @Part("email") email: RequestBody,
+        @Part("education") educationLevel: RequestBody,
+        @Part("phone_number") phoneNumber: RequestBody,
+        @Part("password") password: RequestBody,
     ): RegisterResponse
 
     @Multipart
-    @POST("login")
+    @POST("auth/login")
     suspend fun login(
-        @Field("email") email: String, @Field("password") password: String,
+        @Part("email") email: RequestBody, @Part("password") password: RequestBody,
     ): LoginResponse
 
     @POST("auth/register")

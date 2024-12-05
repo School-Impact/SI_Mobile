@@ -24,6 +24,9 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
     private val _educationLevelState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val educationLevelState = _educationLevelState.asStateFlow()
 
+    private val _phoneNumberState = MutableStateFlow<ValidationState>(ValidationState.Initial)
+    val phoneNumberState = _phoneNumberState.asStateFlow()
+
     private val _passwordState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val passwordState = _passwordState.asStateFlow()
 
@@ -39,7 +42,13 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
     private var currentName = ""
     private var currentEmail = ""
     private var currentEducationLevel = ""
+    private var currentPhoneNumber = ""
     private var currentPassword = ""
+
+    fun updateName(name: String) {
+        currentName = name
+        _nameState.value = validateName(name)
+    }
 
     fun updateEmail(email: String) {
         currentEmail = email
@@ -51,6 +60,10 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
         _educationLevelState.value = validateEducationLevel(level)
     }
 
+    fun updatePhoneNumber(phoneNumber: String) {
+        currentPhoneNumber = phoneNumber
+        _phoneNumberState.value = validatePhoneNumber(phoneNumber)
+    }
 
     fun updatePassword(password: String) {
         currentPassword = password
@@ -65,7 +78,13 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
             }
             _registerState.value = AuthState.Loading
             try {
-                authRepository.login(currentEmail, currentPassword).catch { e ->
+                authRepository.register(
+                    currentName,
+                    currentEmail,
+                    currentEducationLevel,
+                    currentPhoneNumber,
+                    currentPassword
+                ).catch { e ->
                     _registerState.value = AuthState.Error(e.message.toString())
                 }.collect { user ->
                     _registerState.value = AuthState.Success(user)
@@ -101,15 +120,16 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
         val nameValidation = validateName(currentName)
         val emailValidation = validateEmail(currentEmail)
         val educationValidation = validateEducationLevel(currentEducationLevel)
+        val phoneNumberValidation = validatePhoneNumber(currentPhoneNumber)
         val passwordValidation = validatePassword(currentPassword)
 
         _nameState.value = nameValidation
         _emailState.value = emailValidation
         _educationLevelState.value = educationValidation
+        _phoneNumberState.value = phoneNumberValidation
         _passwordState.value = passwordValidation
 
-        return nameValidation is ValidationState.Valid && emailValidation is ValidationState.Valid
-                && passwordValidation is ValidationState.Valid && educationValidation is ValidationState.Valid
+        return nameValidation is ValidationState.Valid && emailValidation is ValidationState.Valid && educationValidation is ValidationState.Valid && phoneNumberValidation is ValidationState.Valid && passwordValidation is ValidationState.Valid
     }
 
     private fun validateName(name: String): ValidationState {
@@ -118,7 +138,6 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
             else -> ValidationState.Valid
         }
     }
-
 
     private fun validateEmail(email: String): ValidationState {
         return when {
@@ -134,6 +153,14 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
     private fun validateEducationLevel(level: String): ValidationState {
         return when {
             level.isBlank() -> ValidationState.Invalid("Education level cannot be empty")
+            else -> ValidationState.Valid
+        }
+    }
+
+    private fun validatePhoneNumber(phoneNumber: String): ValidationState {
+        return when {
+            phoneNumber.isBlank() -> ValidationState.Invalid("Phone number cannot be empty")
+            !phoneNumber.matches(Regex("^\\+?[0-9]{10,15}$")) -> ValidationState.Invalid("Invalid phone number format")
             else -> ValidationState.Valid
         }
     }
@@ -154,10 +181,15 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
     }
 
     fun resetStates() {
+        _nameState.value = ValidationState.Initial
         _emailState.value = ValidationState.Initial
         _educationLevelState.value = ValidationState.Initial
+        _phoneNumberState.value = ValidationState.Initial
         _passwordState.value = ValidationState.Initial
+        currentName = ""
         currentEmail = ""
+        currentEducationLevel = ""
+        currentPhoneNumber = ""
         currentPassword = ""
     }
 }

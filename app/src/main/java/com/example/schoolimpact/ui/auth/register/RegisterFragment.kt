@@ -62,12 +62,10 @@ class RegisterFragment : Fragment() {
 
     private fun setupListeners() {
         with(binding) {
+            setupTextWatcher(etName) { viewModel.updateName(it) }
             setupTextWatcher(etEmail) { viewModel.updateEmail(it) }
+            setupTextWatcher(etPhoneNumber) { viewModel.updatePhoneNumber(it) }
             setupTextWatcher(etPassword) { viewModel.updatePassword(it) }
-
-            btnSendVerification.setOnClickListener {
-                viewModel.verifyEmail()
-            }
 
             educationLevelDropdown.setOnItemClickListener { _, _, position, _ ->
                 viewModel.updateEducationLevel(
@@ -77,10 +75,13 @@ class RegisterFragment : Fragment() {
                 )
             }
 
+            btnSendVerification.setOnClickListener {
+                viewModel.verifyEmail()
+            }
+
             btnRegister.setOnClickListener {
                 viewModel.register()
             }
-
         }
     }
 
@@ -88,8 +89,9 @@ class RegisterFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             launch { viewModel.nameState.collectLatest { handleNameState(it) } }
             launch { viewModel.emailState.collectLatest { handleEmailState(it) } }
-            launch { viewModel.passwordState.collectLatest { handlePasswordState(it) } }
             launch { viewModel.educationLevelState.collectLatest { handleEducationLevelState(it) } }
+            launch { viewModel.phoneNumberState.collectLatest { handlePhoneNumberState(it) } }
+            launch { viewModel.passwordState.collectLatest { handlePasswordState(it) } }
             launch { viewModel.registerState.collectLatest { handleRegisterState(it) } }
             launch { viewModel.verificationState.collectLatest { handleVerificationState(it) } }
             launch { viewModel.showErrorAnimation.collectLatest { handleErrorAnimation(it) } }
@@ -118,6 +120,11 @@ class RegisterFragment : Fragment() {
 
     private fun handleEducationLevelState(state: ValidationState) {
         binding.educationLevelDropdownLayout.error =
+            if (state is ValidationState.Invalid) state.message else null
+    }
+
+    private fun handlePhoneNumberState(state: ValidationState) {
+        binding.phoneNumberInputLayout.error =
             if (state is ValidationState.Invalid) state.message else null
     }
 

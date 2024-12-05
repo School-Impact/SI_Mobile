@@ -21,7 +21,9 @@ class AuthRepository private constructor(
     fun login(email: String, password: String): Flow<Result<User>> = flow {
         emit(Result.Loading)
         try {
-            val response = apiService.login(email, password)
+            val emailRequestBody = email.toRequestBody("text/plain".toMediaType())
+            val passwordRequestBody = password.toRequestBody("text/plain".toMediaType())
+            val response = apiService.login(emailRequestBody, passwordRequestBody)
             val userData = response.data
             val user = User(
                 name = userData?.name.toString(), token = response.token.toString()
@@ -37,19 +39,30 @@ class AuthRepository private constructor(
     }
 
     fun register(
-        name: String, email: String, educationLevel: String, password: String
+        name: String, email: String, educationLevel: String, phoneNumber: String, password: String
     ): Flow<Result<String>> = flow {
         emit(Result.Loading)
         try {
-            val message = apiService.register(name, email, educationLevel, password).message
-            emit(Result.Success(message))
+            val nameRequestBody = name.toRequestBody("text/plain".toMediaType())
+            val emailRequestBody = email.toRequestBody("text/plain".toMediaType())
+            val educationRequestBody = educationLevel.toRequestBody("text/plain".toMediaType())
+            val phoneNumberRequestBody = phoneNumber.toRequestBody("text/plain".toMediaType())
+            val passwordRequestBody = password.toRequestBody("text/plain".toMediaType())
+            val response = apiService.register(
+                nameRequestBody,
+                emailRequestBody,
+                educationRequestBody,
+                phoneNumberRequestBody,
+                passwordRequestBody
+            ).message
+            emit(Result.Success(response))
         } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()
             val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
             val errorMessage = errorBody.message
             emit(Result.Error(errorMessage.toString()))
             Log.e(TAG, "Register : $errorMessage")
-        } catch (e: IOException) {
+        } catch (e: java.io.IOException) {
             emit(Result.Error("No Internet Connection"))
             Log.e(TAG, "Register : ${e.localizedMessage}")
         } catch (e: Exception) {
@@ -66,21 +79,30 @@ class AuthRepository private constructor(
     fun verifyEmail(email: String): Flow<Result<String>> = flow {
         emit(Result.Loading)
         try {
-            val response = apiService.verifyEmail(email.toRequestBody("text/plain".toMediaType()))
+            val emailRequestBody = email.toRequestBody("text/plain".toMediaType())
+            val response = apiService.verifyEmail(emailRequestBody)
             emit(Result.Success(response.message))
 
         } catch (e: HttpException) {
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            val errorMessage = errorBody.message
-            emit(Result.Error(errorMessage.toString()))
-            Log.e(TAG, "Register : $errorMessage")
+            val errorMessage = parseHttpError(e)
+            emit(Result.Error(errorMessage))
+            Log.e(TAG, "HTTP Exception: ${e.response()?.errorBody()?.string()}")
         } catch (e: IOException) {
             emit(Result.Error("No Internet Connection"))
-            Log.e(TAG, "Login : ${e.localizedMessage}")
+            Log.e(TAG, "Network Exception: ${e.localizedMessage}")
         } catch (e: Exception) {
-            Log.e(TAG, "Login : ${e.message.toString()}")
+            Log.e(TAG, "Verify Email : ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    private fun parseHttpError(e: HttpException): String {
+        return try {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            errorBody.message ?: "An unknown error occurred."
+        } catch (parseException: Exception) {
+            "Failed to parse error response."
         }
     }
 
