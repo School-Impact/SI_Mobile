@@ -1,18 +1,25 @@
 package com.example.schoolimpact
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.databinding.ActivityMainBinding
+import com.example.schoolimpact.ui.auth.AuthActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var authDataSource: AuthDataSource
 
     private lateinit var navController: NavController
 
@@ -20,9 +27,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        setupUi()
+        authDataSource = AuthDataSource(this)
+
+        lifecycleScope.launch {
+            val isLoggedIn = authDataSource.isLoggedIn()
+            if (!isLoggedIn) {
+                val intent = Intent(this@MainActivity, AuthActivity::class.java)
+                startActivity(intent)
+                finish()
+                return@launch
+            } else {
+                setupUi()
+            }
+        }
     }
 
     private fun setupUi() {

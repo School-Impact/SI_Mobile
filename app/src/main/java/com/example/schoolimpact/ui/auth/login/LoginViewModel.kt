@@ -6,6 +6,7 @@ import com.example.schoolimpact.data.model.User
 import com.example.schoolimpact.data.repository.AuthRepository
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
+import com.example.schoolimpact.utils.Result
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -22,7 +23,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _passwordState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val passwordState = _passwordState.asStateFlow()
 
-    private val _loginState = MutableStateFlow<AuthState<User>>(AuthState.Initial)
+    private val _loginState = MutableStateFlow<AuthState<Result<User>>>(AuthState.Initial)
     val loginState = _loginState.asStateFlow()
 
     private val _showErrorAnimation = MutableSharedFlow<String>()

@@ -1,17 +1,17 @@
 <resources>
     <string-array name="education_levels">
-        <item>Class 1</item>
-        <item>Class 2</item>
-        <item>Class 3</item>
-        <item>Class 4</item>
-        <item>Class 5</item>
-        <item>Class 6</item>
-        <item>Class 7</item>
-        <item>Class 8</item>
-        <item>Class 9</item>
-        <item>Class 10</item>
-        <item>Class 11</item>
-        <item>Class 12</item>
+        <item>Kelas 1</item>
+        <item>Kelas 2</item>
+        <item>Kelas 3</item>
+        <item>Kelas 4</item>
+        <item>Kelas 5</item>
+        <item>Kelas 6</item>
+        <item>Kelas 7</item>
+        <item>Kelas 8</item>
+        <item>Kelas 9</item>
+        <item>Kelas 10</item>
+        <item>Kelas 11</item>
+        <item>Kelas 12</item>
     </string-array>
 
 </resources>

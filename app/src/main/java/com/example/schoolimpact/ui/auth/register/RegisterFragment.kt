@@ -7,6 +7,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +26,7 @@ class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private lateinit var registerViewModel: RegisterViewModel
+    private lateinit var viewModel: RegisterViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -41,105 +43,113 @@ class RegisterFragment : Fragment() {
         setupListeners()
         observeStates()
 
+        val educationLevels = resources.getStringArray(R.array.education_levels)
+        val educationLevelAdapter = ArrayAdapter(
+            requireContext(), android.R.layout.simple_dropdown_item_1line, educationLevels
+        )
+        binding.educationLevelDropdown.setAdapter(educationLevelAdapter)
+
+        binding.educationLevelDropdown.setOnItemClickListener { _, _, position, _ ->
+            viewModel.updateEducationLevel(educationLevels[position])
+        }
+
     }
 
     private fun setupViewModel() {
         val factory = ViewModelFactory.getInstance(requireActivity())
-        registerViewModel = ViewModelProvider(this, factory)[RegisterViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[RegisterViewModel::class.java]
     }
 
     private fun setupListeners() {
-        with(binding) {
-            binding.etEmail.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
+        setupTextWatcher(binding.etEmail) { viewModel.updateEmail(it) }
+        setupTextWatcher(binding.etPassword) { viewModel.updatePassword(it) }
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-                override fun afterTextChanged(s: Editable?) {
-                    registerViewModel.updateEmail(s.toString())
-                }
-            })
-
-            binding.etPassword.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-                override fun afterTextChanged(s: Editable?) {
-                    registerViewModel.updatePassword(s.toString())
-                }
-
-            })
-
-            btnRegister.setOnClickListener {
-                registerViewModel.register()
-            }
-
+        binding.btnSendVerification.setOnClickListener {
+            viewModel.verifyEmail()
         }
+
+        binding.educationLevelDropdown.setOnItemClickListener { _, _, position, _ ->
+            viewModel.updateEducationLevel(binding.educationLevelDropdown.adapter.getItem(position) as String)
+        }
+
+        binding.btnRegister.setOnClickListener {
+            viewModel.register()
+        }
+
     }
 
     private fun observeStates() {
         viewLifecycleOwner.lifecycleScope.launch {
-            registerViewModel.nameState.collectLatest { state ->
-                binding.nameInputLayout.error = when (state) {
-                    is ValidationState.Invalid -> state.message
-                    else -> null
-                }
-            }
+            launch { viewModel.nameState.collectLatest { handleNameState(it) } }
+            launch { viewModel.emailState.collectLatest { handleEmailState(it) } }
+            launch { viewModel.passwordState.collectLatest { handlePasswordState(it) } }
+            launch { viewModel.educationLevelState.collectLatest { handleEducationLevelState(it) } }
+            launch { viewModel.registerState.collectLatest { handleRegisterState(it) } }
+            launch { viewModel.verificationState.collectLatest { handleVerificationState(it) } }
+            launch { viewModel.showErrorAnimation.collectLatest { handleErrorAnimation(it) } }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            registerViewModel.emailState.collectLatest { state ->
-                binding.emailInputLayout.error = when (state) {
-                    is ValidationState.Invalid -> state.message
-                    else -> null
-                }
+    }
+
+    private fun setupTextWatcher(editText: EditText, updateFunction: (String) -> Unit) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                updateFunction(s.toString())
             }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            registerViewModel.passwordState.collectLatest { state ->
-                binding.passwordInputLayout.error = when (state) {
-                    is ValidationState.Invalid -> state.message
-                    else -> null
-                }
+        })
+    }
+
+    private fun handleNameState(state: ValidationState) {
+        binding.nameInputLayout.error =
+            if (state is ValidationState.Invalid) state.message else null
+    }
+
+    private fun handleEmailState(state: ValidationState) {
+        binding.emailInputLayout.error =
+            if (state is ValidationState.Invalid) state.message else null
+    }
+
+    private fun handleEducationLevelState(state: ValidationState) {
+        binding.educationLevelDropdownLayout.error =
+            if (state is ValidationState.Invalid) state.message else null
+    }
+
+    private fun handlePasswordState(state: ValidationState) {
+        binding.passwordInputLayout.error =
+            if (state is ValidationState.Invalid) state.message else null
+    }
+
+    private fun handleRegisterState(state: AuthState<*>) {
+        when (state) {
+            is AuthState.Initial -> Unit
+            is AuthState.Loading -> showLoading(true)
+            is AuthState.Success<*> -> {
+                showLoading(false)
+                showSnackBar(getString(R.string.success_login))
+                navigateBackToLogin()
             }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            registerViewModel.registerState.collectLatest { state ->
-                when (state) {
-                    is AuthState.Initial -> Unit
-                    is AuthState.Loading -> showLoading(true)
-                    is AuthState.Success -> {
-                        showLoading(false)
-                        showSnackBar(getString(R.string.success_login))
-                        navigateBackToLogin()
-                    }
-                    is AuthState.Error -> {
-                        showLoading(false)
-                        showErrorAnimations(
-                            binding.cardRegisterForm, state.error
-                        )
-                    }
-                }
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            registerViewModel.showErrorAnimation.collectLatest { error ->
-                showErrorAnimations(binding.cardRegisterForm, error)
+
+            is AuthState.Error -> {
+                showLoading(false)
+                showErrorAnimations(binding.cardRegisterForm, state.error)
             }
         }
     }
+
+    private fun handleVerificationState(state: VerificationState) {
+        when (state) {
+            is VerificationState.Idle -> Unit
+            is VerificationState.Loading -> showLoading(true)
+            is VerificationState.Success -> showSnackBar(state.message)
+            is VerificationState.Error -> showSnackBar(state.error)
+        }
+    }
+
+    private fun handleErrorAnimation(error: String) {
+        showErrorAnimations(binding.cardRegisterForm, error)
+    }
+
 
     private fun navigateBackToLogin() {
         findNavController().popBackStack()
@@ -168,7 +178,7 @@ class RegisterFragment : Fragment() {
         super.onResume()
         binding.etEmail.text?.clear()
         binding.etPassword.text?.clear()
-        registerViewModel.resetStates()
+        viewModel.resetStates()
     }
 
     override fun onDestroyView() {

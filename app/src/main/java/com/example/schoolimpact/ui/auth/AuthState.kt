@@ -9,6 +9,6 @@ import com.example.schoolimpact.utils.Result
 sealed class AuthState<out T> {
     data object Initial : AuthState<Nothing>()
     data object Loading : AuthState<Nothing>()
-    data class Success<T>(val user: Result<User>) : AuthState<T>()
+    data class Success<T>(val user: T) : AuthState<T>()
     data class Error(val error: String) : AuthState<Nothing>()
 }

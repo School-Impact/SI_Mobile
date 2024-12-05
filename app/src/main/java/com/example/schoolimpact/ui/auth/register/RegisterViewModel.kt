@@ -2,7 +2,6 @@ package com.example.schoolimpact.ui.auth.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.schoolimpact.data.model.User
 import com.example.schoolimpact.data.repository.AuthRepository
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
@@ -21,23 +20,36 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
     private val _emailState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val emailState = _emailState.asStateFlow()
 
+    private val _educationLevelState = MutableStateFlow<ValidationState>(ValidationState.Initial)
+    val educationLevelState = _educationLevelState.asStateFlow()
+
     private val _passwordState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val passwordState = _passwordState.asStateFlow()
 
-    private val _registerState = MutableStateFlow<AuthState<User>>(AuthState.Initial)
-    val registerState = _registerState.asStateFlow()
+    private val _registerState = MutableStateFlow<AuthState<*>>(AuthState.Initial)
+    val registerState = _registerState
+
+    private val _verificationState = MutableStateFlow<VerificationState>(VerificationState.Idle)
+    val verificationState = _verificationState.asStateFlow()
 
     private val _showErrorAnimation = MutableSharedFlow<String>()
     val showErrorAnimation = _showErrorAnimation.asSharedFlow()
 
     private var currentName = ""
     private var currentEmail = ""
+    private var currentEducationLevel = ""
     private var currentPassword = ""
 
     fun updateEmail(email: String) {
         currentEmail = email
         _emailState.value = validateEmail(email)
     }
+
+    fun updateEducationLevel(level: String) {
+        currentEducationLevel = level
+        _educationLevelState.value = validateEducationLevel(level)
+    }
+
 
     fun updatePassword(password: String) {
         currentPassword = password
@@ -63,16 +75,31 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
         }
     }
 
+    fun verifyEmail() {
+        viewModelScope.launch {
+            _verificationState.value = VerificationState.Loading
+            try {
+                val response = authRepository.verifyEmail(currentEmail)
+                _verificationState.value = VerificationState.Success(response.message)
+            } catch (e: Exception) {
+                _verificationState.value = VerificationState.Error(e.message.toString())
+            }
+        }
+    }
+
     private fun validateCredentials(): Boolean {
         val nameValidation = validateName(currentName)
         val emailValidation = validateEmail(currentEmail)
+        val educationValidation = validateEducationLevel(currentEducationLevel)
         val passwordValidation = validatePassword(currentPassword)
 
         _nameState.value = nameValidation
         _emailState.value = emailValidation
+        _educationLevelState.value = educationValidation
         _passwordState.value = passwordValidation
 
-        return nameValidation is ValidationState.Valid && emailValidation is ValidationState.Valid && passwordValidation is ValidationState.Valid
+        return nameValidation is ValidationState.Valid && emailValidation is ValidationState.Valid
+                && passwordValidation is ValidationState.Valid && educationValidation is ValidationState.Valid
     }
 
     private fun validateName(name: String): ValidationState {
@@ -94,6 +121,13 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
         }
     }
 
+    private fun validateEducationLevel(level: String): ValidationState {
+        return when {
+            level.isBlank() -> ValidationState.Invalid("Education level cannot be empty")
+            else -> ValidationState.Valid
+        }
+    }
+
     private fun validatePassword(password: String): ValidationState {
         return when {
             password.isEmpty() -> ValidationState.Invalid("Password cannot be empty")
@@ -111,8 +145,16 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
 
     fun resetStates() {
         _emailState.value = ValidationState.Initial
+        _educationLevelState.value = ValidationState.Initial
         _passwordState.value = ValidationState.Initial
         currentEmail = ""
         currentPassword = ""
     }
+}
+
+sealed class VerificationState {
+    data object Idle : VerificationState()
+    data object Loading : VerificationState()
+    data class Success(val message: String) : VerificationState()
+    data class Error(val error: String) : VerificationState()
 }
