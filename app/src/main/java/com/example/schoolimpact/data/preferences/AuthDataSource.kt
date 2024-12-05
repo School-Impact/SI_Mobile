@@ -17,18 +17,16 @@ class AuthDataSource(context: Context) {
 
     suspend fun saveUser(user: User) {
         authDataStore.edit { preferences ->
-            preferences[USER_ID_KEY] = user.userId
             preferences[USER_NAME_KEY] = user.name
             preferences[USER_TOKEN_KEY] = user.token
         }
     }
 
     val user = context.AuthDataStore.data.map { preferences ->
-        val userId = preferences[USER_ID_KEY]
         val name = preferences[USER_NAME_KEY]
         val token = preferences[USER_TOKEN_KEY]
-        if (userId != null && name != null && token != null) {
-            User(userId, name, token)
+        if (name != null && token != null) {
+            User(name, token)
         } else {
             null
         }
@@ -46,7 +44,6 @@ class AuthDataSource(context: Context) {
     }
 
     companion object {
-        private val USER_ID_KEY = stringPreferencesKey("user_id")
         private val USER_NAME_KEY = stringPreferencesKey("user_name")
         private val USER_TOKEN_KEY = stringPreferencesKey("user_token")
     }
