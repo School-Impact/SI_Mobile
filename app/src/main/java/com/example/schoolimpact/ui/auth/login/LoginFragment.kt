@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,12 +20,13 @@ import com.example.schoolimpact.databinding.FragmentLoginBinding
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var loginViewModel: LoginViewModel
+    private lateinit var viewModel: LoginViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -42,46 +44,16 @@ class LoginFragment : Fragment() {
 
     private fun setupViewModel() {
         val factory = ViewModelFactory.getInstance(requireActivity())
-        loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
     }
 
     private fun setupListeners() {
         with(binding) {
-            binding.etEmail.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-                override fun afterTextChanged(s: Editable?) {
-                    loginViewModel.updateEmail(s.toString())
-                }
-            })
-
-            binding.etPassword.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-                override fun afterTextChanged(s: Editable?) {
-                    loginViewModel.updatePassword(s.toString())
-                }
-
-            })
+            setupTextWatcher(etEmail) { viewModel.updateEmail(it) }
+            setupTextWatcher(etPassword) { viewModel.updatePassword(it) }
 
             btnLogin.setOnClickListener {
-                loginViewModel.login()
+                viewModel.login()
             }
 
             btnToRegister.setOnClickListener {
@@ -93,50 +65,51 @@ class LoginFragment : Fragment() {
 
     private fun observeStates() {
         viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.emailState.collect { state ->
-                binding.emailInputLayout.error = when (state) {
-                    is ValidationState.Invalid -> state.message
-                    else -> null
-                }
+            launch { viewModel.emailState.collectLatest { handleEmailState(it) } }
+            launch { viewModel.passwordState.collectLatest { handlePasswordState(it) } }
+            launch { viewModel.loginState.collectLatest { handleLoginState(it) } }
+            launch { viewModel.showErrorAnimation.collectLatest { handleErrorAnimation(it) } }
+        }
+    }
+
+    private fun setupTextWatcher(editText: EditText, updateFunction: (String) -> Unit) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                updateFunction(s.toString())
+            }
+        })
+    }
+
+    private fun handleEmailState(state: ValidationState) {
+        binding.emailInputLayout.error =
+            if (state is ValidationState.Invalid) state.message else null
+    }
+
+    private fun handlePasswordState(state: ValidationState) {
+        binding.passwordInputLayout.error =
+            if (state is ValidationState.Invalid) state.message else null
+    }
+
+    private fun handleLoginState(state: AuthState<*>) {
+        when (state) {
+            is AuthState.Initial -> Unit
+            is AuthState.Loading -> showLoading(true)
+            is AuthState.Success<*> -> {
+                showLoading(false)
+                showSnackBar(getString(R.string.success_login))
+            }
+
+            is AuthState.Error -> {
+                showLoading(false)
+                showErrorAnimations(binding.cardLoginForm, state.error)
             }
         }
+    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.passwordState.collect { state ->
-                binding.passwordInputLayout.error = when (state) {
-                    is ValidationState.Invalid -> state.message
-                    else -> null
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.loginState.collect { state ->
-                when (state) {
-                    is AuthState.Initial -> Unit
-                    is AuthState.Loading -> showLoading(true)
-                    is AuthState.Success -> {
-                        showLoading(false)
-                        showSnackBar(getString(R.string.success_login))
-                        navigateToMain()
-                    }
-
-                    is AuthState.Error -> {
-                        showLoading(false)
-                        showErrorAnimations(
-                            binding.cardLoginForm, state.error
-                        )
-                    }
-
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.showErrorAnimation.collect { error ->
-                showErrorAnimations(binding.cardLoginForm, error)
-            }
-        }
+    private fun handleErrorAnimation(error: String) {
+        showErrorAnimations(binding.cardLoginForm, error)
     }
 
     private fun navigateToMain() {
@@ -169,7 +142,7 @@ class LoginFragment : Fragment() {
         super.onResume()
         binding.etEmail.text?.clear()
         binding.etPassword.text?.clear()
-        loginViewModel.resetStates()
+        viewModel.resetStates()
     }
 
     override fun onDestroyView() {
