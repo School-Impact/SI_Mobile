@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.schoolimpact.data.repository.AuthRepository
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
+import com.example.schoolimpact.utils.Result
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -78,11 +79,20 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
     fun verifyEmail() {
         viewModelScope.launch {
             _verificationState.value = VerificationState.Loading
-            try {
-                val response = authRepository.verifyEmail(currentEmail)
-                _verificationState.value = VerificationState.Success(response.message)
-            } catch (e: Exception) {
-                _verificationState.value = VerificationState.Error(e.message.toString())
+            authRepository.verifyEmail(currentEmail).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _verificationState.value = VerificationState.Success(result.data)
+                    }
+
+                    is Result.Error -> {
+                        _verificationState.value = VerificationState.Error(result.error)
+                    }
+
+                    is Result.Loading -> {
+                        _verificationState.value = VerificationState.Loading
+                    }
+                }
             }
         }
     }

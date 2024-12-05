@@ -3,7 +3,6 @@ package com.example.schoolimpact.data.api
 import com.example.schoolimpact.data.model.EmailResponse
 import com.example.schoolimpact.data.model.LoginResponse
 import com.example.schoolimpact.data.model.RegisterResponse
-import com.example.schoolimpact.utils.Result
 import okhttp3.RequestBody
 import retrofit2.http.Field
 import retrofit2.http.Headers

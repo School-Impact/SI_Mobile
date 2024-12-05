@@ -1,8 +1,5 @@
 package com.example.schoolimpact.ui.auth
 
-import com.example.schoolimpact.data.model.User
-import com.example.schoolimpact.utils.Result
-
 /**
  * Data validation state of the login form.
  */

@@ -39,7 +39,7 @@ class EmailVerificationViewModel(private val authRepository: AuthRepository) : V
             _verificationState.value = VerificationState.Loading
             try {
                 val response = authRepository.verifyEmail(currentEmail)
-                _verificationState.value = VerificationState.Success(response.message)
+//                _verificationState.value = VerificationState.Success(response.message)
             } catch (e: Exception) {
                 _verificationState.value = VerificationState.Error(e.message.toString())
             }

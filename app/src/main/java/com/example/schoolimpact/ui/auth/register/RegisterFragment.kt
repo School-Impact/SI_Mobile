@@ -61,21 +61,27 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        setupTextWatcher(binding.etEmail) { viewModel.updateEmail(it) }
-        setupTextWatcher(binding.etPassword) { viewModel.updatePassword(it) }
+        with(binding) {
+            setupTextWatcher(etEmail) { viewModel.updateEmail(it) }
+            setupTextWatcher(etPassword) { viewModel.updatePassword(it) }
 
-        binding.btnSendVerification.setOnClickListener {
-            viewModel.verifyEmail()
+            btnSendVerification.setOnClickListener {
+                viewModel.verifyEmail()
+            }
+
+            educationLevelDropdown.setOnItemClickListener { _, _, position, _ ->
+                viewModel.updateEducationLevel(
+                    educationLevelDropdown.adapter.getItem(
+                        position
+                    ) as String
+                )
+            }
+
+            btnRegister.setOnClickListener {
+                viewModel.register()
+            }
+
         }
-
-        binding.educationLevelDropdown.setOnItemClickListener { _, _, position, _ ->
-            viewModel.updateEducationLevel(binding.educationLevelDropdown.adapter.getItem(position) as String)
-        }
-
-        binding.btnRegister.setOnClickListener {
-            viewModel.register()
-        }
-
     }
 
     private fun observeStates() {
@@ -141,8 +147,15 @@ class RegisterFragment : Fragment() {
         when (state) {
             is VerificationState.Idle -> Unit
             is VerificationState.Loading -> showLoading(true)
-            is VerificationState.Success -> showSnackBar(state.message)
-            is VerificationState.Error -> showSnackBar(state.error)
+            is VerificationState.Success -> {
+                showLoading(false)
+                showSnackBar(state.message)
+            }
+
+            is VerificationState.Error -> {
+                showLoading(false)
+                showSnackBar(state.error)
+            }
         }
     }
 

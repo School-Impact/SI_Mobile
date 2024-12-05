@@ -2,7 +2,6 @@ package com.example.schoolimpact.data.repository
 
 import android.util.Log
 import com.example.schoolimpact.data.api.ApiService
-import com.example.schoolimpact.data.model.EmailResponse
 import com.example.schoolimpact.data.model.ErrorResponse
 import com.example.schoolimpact.data.model.User
 import com.example.schoolimpact.data.preferences.AuthDataSource
@@ -25,8 +24,7 @@ class AuthRepository private constructor(
             val response = apiService.login(email, password)
             val userData = response.data
             val user = User(
-                name = userData?.name.toString(),
-                token = response.token.toString()
+                name = userData?.name.toString(), token = response.token.toString()
             )
             emit(Result.Success(user))
         } catch (e: IOException) {
@@ -37,33 +35,6 @@ class AuthRepository private constructor(
             emit(Result.Error(e.message.toString()))
         }
     }
-
-    //untuk testing
-//    fun login(email: String, password: String): Flow<Result<User>> = flow {
-//        emit(Result.Loading)
-//        try {
-//            // Simulate network delay
-//            delay(1000)
-//
-//            // Dummy User for testing
-//            val dummyEmail = "test@example.com"
-//            val dummyPassword = "password123"
-//
-//            if (email == dummyEmail && password == dummyPassword) {
-//                val dummyUser = User(
-//                    userId = "12345",
-//                    name = "Test User",
-//                    token = "dummy_token_12345"
-//                )
-//                emit(Result.Success(dummyUser))
-//            } else {
-//                emit(Result.Error("Invalid credentials"))
-//            }
-//        } catch (e: Exception) {
-//            emit(Result.Error(e.message.toString()))
-//            Log.e(TAG, "Login : ${e.message.toString()}")
-//        }
-//    }
 
     fun register(
         name: String, email: String, educationLevel: String, password: String
@@ -91,8 +62,27 @@ class AuthRepository private constructor(
 
     suspend fun logout() = authDataSource.logout()
 
-    suspend fun verifyEmail(email: String): EmailResponse =
-        apiService.verifyEmail(email.toRequestBody("text/plain".toMediaType()))
+
+    fun verifyEmail(email: String): Flow<Result<String>> = flow {
+        emit(Result.Loading)
+        try {
+            val response = apiService.verifyEmail(email.toRequestBody("text/plain".toMediaType()))
+            emit(Result.Success(response.message))
+
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+            Log.e(TAG, "Register : $errorMessage")
+        } catch (e: IOException) {
+            emit(Result.Error("No Internet Connection"))
+            Log.e(TAG, "Login : ${e.localizedMessage}")
+        } catch (e: Exception) {
+            Log.e(TAG, "Login : ${e.message.toString()}")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
 
 
     companion object {

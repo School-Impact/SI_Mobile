@@ -75,12 +75,13 @@
                         android:layout_height="wrap_content"
                         android:text="@string/verify_email"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         app:cornerRadius="4dp"
                         app:layout_constraintBottom_toBottomOf="@id/et_email"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/email_input_layout"
-                        app:layout_constraintTop_toTopOf="@id/et_email" />
+                        app:layout_constraintTop_toTopOf="@id/et_email"
+                        tools:ignore="NotSibling" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
