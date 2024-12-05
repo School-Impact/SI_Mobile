@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 import com.example.schoolimpact.ui.main.discover.major.list.placeholder.PlaceholderContent.PlaceholderItem
-import com.example.schoolimpact.databinding.FragmentItemBinding
+import com.example.schoolimpact.databinding.MajorItemBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
@@ -19,7 +19,7 @@ class MajorListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return ViewHolder(
-            FragmentItemBinding.inflate(
+            MajorItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -36,7 +36,7 @@ class MajorListAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(binding: MajorItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val idView: TextView = binding.itemNumber
         val contentView: TextView = binding.content
 
