@@ -29,9 +29,12 @@ class AuthRepository private constructor(
                 name = userData?.name.toString(), token = response.token.toString()
             )
             emit(Result.Success(user))
+        } catch (e: HttpException) {
+            val errorResult = parseHttpException(e, TAG)
+            emit(errorResult)
         } catch (e: IOException) {
             emit(Result.Error("No Internet Connection"))
-            Log.e(TAG, "Login : ${e.localizedMessage}")
+            Log.e(TAG, "Network Exception : ${e.localizedMessage}")
         } catch (e: Exception) {
             Log.e(TAG, "Login : ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
@@ -57,14 +60,11 @@ class AuthRepository private constructor(
             ).message
             emit(Result.Success(response))
         } catch (e: HttpException) {
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            val errorMessage = errorBody.message
-            emit(Result.Error(errorMessage.toString()))
-            Log.e(TAG, "Register : $errorMessage")
-        } catch (e: java.io.IOException) {
+            val errorResult = parseHttpException(e, TAG)
+            emit(errorResult)
+        } catch (e: IOException) {
             emit(Result.Error("No Internet Connection"))
-            Log.e(TAG, "Register : ${e.localizedMessage}")
+            Log.e(TAG, "Network Exception : ${e.localizedMessage}")
         } catch (e: Exception) {
             emit(Result.Error(e.message.toString()))
             Log.e(TAG, "Register : ${e.localizedMessage}")
@@ -84,9 +84,8 @@ class AuthRepository private constructor(
             emit(Result.Success(response.message))
 
         } catch (e: HttpException) {
-            val errorMessage = parseHttpError(e)
-            emit(Result.Error(errorMessage))
-            Log.e(TAG, "HTTP Exception: ${e.response()?.errorBody()?.string()}")
+            val errorResult = parseHttpException(e, TAG)
+            emit(errorResult)
         } catch (e: IOException) {
             emit(Result.Error("No Internet Connection"))
             Log.e(TAG, "Network Exception: ${e.localizedMessage}")
@@ -96,14 +95,18 @@ class AuthRepository private constructor(
         }
     }
 
-    private fun parseHttpError(e: HttpException): String {
-        return try {
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            errorBody.message ?: "An unknown error occurred."
-        } catch (parseException: Exception) {
-            "Failed to parse error response."
+    private fun parseHttpException(e: HttpException, tag: String): Result.Error {
+        val errorCode = e.code() // Retrieves the HTTP status code
+        val jsonInString = e.response()?.errorBody()?.string()
+        val errorBody = try {
+            Gson().fromJson(jsonInString, ErrorResponse::class.java)
+        } catch (ex: Exception) {
+            null
         }
+
+        val errorMessage = errorBody?.message ?: "Unknown error"
+        Log.e(tag, "HTTP Exception [$errorCode]: $errorMessage")
+        return Result.Error(errorMessage)
     }
 
 
