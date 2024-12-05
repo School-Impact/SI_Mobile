@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.schoolimpact.data.repository.AuthRepository
 import com.example.schoolimpact.di.Injection
-import com.example.schoolimpact.ui.auth.emailVerification.EmailVerificationViewModel
 import com.example.schoolimpact.ui.auth.login.LoginViewModel
 import com.example.schoolimpact.ui.auth.register.RegisterViewModel
 
@@ -26,10 +25,6 @@ class ViewModelFactory private constructor(
 
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(authRepository) as T
-            }
-
-            modelClass.isAssignableFrom(EmailVerificationViewModel::class.java) -> {
-                EmailVerificationViewModel(authRepository) as T
             }
 
             else -> null
