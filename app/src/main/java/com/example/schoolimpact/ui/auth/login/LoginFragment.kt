@@ -21,6 +21,7 @@ import com.example.schoolimpact.databinding.FragmentLoginBinding
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -89,6 +90,7 @@ class LoginFragment : Fragment() {
     private fun handleEmailState(state: ValidationState) {
         binding.emailInputLayout.error =
             if (state is ValidationState.Invalid) state.message else null
+
     }
 
     private fun handlePasswordState(state: ValidationState) {
@@ -148,8 +150,6 @@ class LoginFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.etEmail.text?.clear()
-        binding.etPassword.text?.clear()
         viewModel.resetStates()
     }
 

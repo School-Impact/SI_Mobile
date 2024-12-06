@@ -196,8 +196,6 @@ class RegisterFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.etEmail.text?.clear()
-        binding.etPassword.text?.clear()
         viewModel.resetStates()
     }
 
