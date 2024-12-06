@@ -4,17 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.schoolimpact.databinding.FragmentDiscoverBinding
+import com.google.android.material.tabs.TabLayoutMediator
 
 class DiscoverFragment : Fragment() {
-
     private var _binding: FragmentDiscoverBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,17 +17,25 @@ class DiscoverFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val discoverViewModel =
-            ViewModelProvider(this).get(DiscoverViewModel::class.java)
-
         _binding = FragmentDiscoverBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        val textView: TextView = binding.textDashboard
-        discoverViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Set up ViewPager2
+        val pagerAdapter = MajorPagerAdapter(this)
+        binding.viewPager.adapter = pagerAdapter
+
+        // Connect TabLayout with ViewPager2
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> "SMA"
+                1 -> "SMK"
+                else -> ""
+            }
+        }.attach()
     }
 
     override fun onDestroyView() {

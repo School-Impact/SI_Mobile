@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.annotation)
+    implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
 
     // Android Jetpack components
@@ -80,11 +81,7 @@ dependencies {
     // Firebase
     implementation(libs.firebase.auth.ktx)
 
-    // validations
-    implementation(libs.easyvalidation)
-
-
-
+    implementation (libs.androidx.viewpager2)
 
 
 

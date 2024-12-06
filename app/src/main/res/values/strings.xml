@@ -27,4 +27,8 @@
     <string name="verify_email">Verification</string>
     <string name="prompt_phone_number">08xx xxxx xxxx</string>
     <string name="log_out">Log Out</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="item_major_name_placeholder">List item</string>
+    <string name="title_major_detail">Major Detail</string>
 </resources>
