@@ -3,11 +3,16 @@ package com.example.schoolimpact.ui.main.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.schoolimpact.data.repository.AuthRepository
+import kotlinx.coroutines.launch
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Profile Screen"
+
+    fun logout() {
+        viewModelScope.launch {
+            authRepository.logout()
+        }
     }
-    val text: LiveData<String> = _text
 }

@@ -29,7 +29,7 @@ class AuthActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_login, R.id.navigation_registration, R.id.navigation_email_verification
+                R.id.navigation_login, R.id.navigation_registration
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

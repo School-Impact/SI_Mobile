@@ -72,11 +72,6 @@ class AuthRepository private constructor(
         }
     }
 
-
-    suspend fun saveUser(user: UserData) = authDataSource.saveUser(user)
-//    suspend fun logout() = authDataSource.logout()
-
-
     fun verifyEmail(email: String): Flow<Result<String>> = flow {
         emit(Result.Loading)
         try {
@@ -95,6 +90,12 @@ class AuthRepository private constructor(
             emit(Result.Error(e.message.toString()))
         }
     }
+
+    suspend fun saveUser(user: UserData) = authDataSource.saveUser(user)
+
+    suspend fun logout() = authDataSource.logout()
+
+
 
     private fun parseHttpException(e: HttpException): AuthState.Error {
         val errorCode = e.code() // Retrieves the HTTP status code
