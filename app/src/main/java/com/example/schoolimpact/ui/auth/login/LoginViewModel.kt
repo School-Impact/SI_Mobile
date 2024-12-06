@@ -23,7 +23,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _passwordState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val passwordState = _passwordState.asStateFlow()
 
-    private val _loginState = MutableStateFlow<AuthState<Result<User>>>(AuthState.Initial)
+    private val _loginState = MutableStateFlow<AuthState<User>>(AuthState.Initial)
     val loginState = _loginState.asStateFlow()
 
     private val _showErrorAnimation = MutableSharedFlow<String>()
@@ -50,14 +50,10 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 return@launch
             }
             _loginState.value = AuthState.Loading
-            try {
-                authRepository.login(currentEmail, currentPassword).catch { e ->
-                    _loginState.value = AuthState.Error(e.message.toString())
-                }.collectLatest { user ->
-                    _loginState.value = AuthState.Success(user)
-                }
-            } catch (e: Exception) {
-                handleError(e.message.toString())
+            authRepository.login(currentEmail, currentPassword).catch { e ->
+                _loginState.value = AuthState.Error(e.message.toString())
+            }.collectLatest { state ->
+                _loginState.value = state
             }
         }
     }

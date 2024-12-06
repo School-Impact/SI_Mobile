@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel() {
@@ -77,20 +76,14 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
                 return@launch
             }
             _registerState.value = AuthState.Loading
-            try {
-                authRepository.register(
-                    currentName,
-                    currentEmail,
-                    currentEducationLevel,
-                    currentPhoneNumber,
-                    currentPassword
-                ).catch { e ->
-                    _registerState.value = AuthState.Error(e.message.toString())
-                }.collect { user ->
-                    _registerState.value = AuthState.Success(user)
-                }
-            } catch (e: Exception) {
-                handleError(e.message.toString())
+            authRepository.register(
+                currentName,
+                currentEmail,
+                currentEducationLevel,
+                currentPhoneNumber,
+                currentPassword
+            ).collect { state ->
+                _registerState.value = state
             }
         }
     }

@@ -98,7 +98,8 @@ class LoginFragment : Fragment() {
             is AuthState.Loading -> showLoading(true)
             is AuthState.Success<*> -> {
                 showLoading(false)
-                showSnackBar(getString(R.string.success_login))
+                showSnackBar(state.message)
+                navigateToMain()
             }
 
             is AuthState.Error -> {
