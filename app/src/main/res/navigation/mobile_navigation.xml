@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/navigation_discover"
-        android:name="com.example.schoolimpact.ui.main.discover.DiscoverFragment"
+        android:name="com.example.schoolimpact.ui.main.discover.major.list.MajorFragment"
         android:label="@string/title_discover"
         tools:layout="@layout/fragment_discover" />
 

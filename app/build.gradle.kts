@@ -81,11 +81,7 @@ dependencies {
     // Firebase
     implementation(libs.firebase.auth.ktx)
 
-    // validations
-    implementation(libs.easyvalidation)
-
-
-
+    implementation (libs.androidx.viewpager2)
 
 
 

@@ -2,7 +2,7 @@ package com.example.schoolimpact.ui.main.discover.major.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.schoolimpact.data.model.MajorListItem
+import com.example.schoolimpact.data.model.ListMajorItem
 import com.example.schoolimpact.data.repository.MajorRepository
 import com.example.schoolimpact.utils.Result
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 
 class MajorViewModel(private val repository: MajorRepository) : ViewModel() {
-    private val _majors = MutableStateFlow<Result<List<MajorListItem>>>(Result.Loading)
+    private val _majors = MutableStateFlow<Result<List<ListMajorItem>>>(Result.Loading)
     val majors = _majors.asStateFlow()
 
     private val _loading = MutableStateFlow(false)

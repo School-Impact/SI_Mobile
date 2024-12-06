@@ -37,10 +37,8 @@ interface ApiService {
     ): EmailResponse
 
     @POST("user/majors")
-    @Multipart
     suspend fun getMajorList(
-        @Header("Authorization") token: String,
-        @Query("category") category: String
+        @Header("Authorization") token: String, @Query("category") category: String
     ): MajorResponse
 
 }

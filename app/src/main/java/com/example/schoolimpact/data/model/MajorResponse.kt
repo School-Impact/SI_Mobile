@@ -10,14 +10,14 @@ import kotlinx.parcelize.Parcelize
 data class MajorResponse(
 
     @field:SerializedName("data")
-    val data: List<MajorListItem>,
+    val data: List<ListMajorItem>,
 
     @field:SerializedName("message")
     val message: String? = null
 ) : Parcelable
 
 @Parcelize
-data class MajorListItem(
+data class ListMajorItem(
 
     @field:SerializedName("id")
     val id: Int? = null,
