@@ -12,9 +12,6 @@
         <action
             android:id="@+id/action_navigation_login_to_navigation_registration"
             app:destination="@id/navigation_registration" />
-        <action
-            android:id="@+id/action_navigation_login_to_navigation_email_verification"
-            app:destination="@id/navigation_email_verification" />
     </fragment>
 
     <fragment
@@ -22,9 +19,4 @@
         android:name="com.example.schoolimpact.ui.auth.register.RegisterFragment"
         android:label="@string/title_sign_up"
         tools:layout="@layout/fragment_register" />
-    <fragment
-        android:id="@+id/navigation_email_verification"
-        android:name="com.example.schoolimpact.ui.auth.emailVerification.EmailVerificationFragment"
-        android:label="@string/title_email_verification"
-        tools:layout="@layout/fragment_email_verification" />
 </navigation>

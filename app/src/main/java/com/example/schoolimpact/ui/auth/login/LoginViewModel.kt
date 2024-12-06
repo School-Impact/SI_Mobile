@@ -2,7 +2,9 @@ package com.example.schoolimpact.ui.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.schoolimpact.data.model.LoginResponse
 import com.example.schoolimpact.data.model.User
+import com.example.schoolimpact.data.model.UserData
 import com.example.schoolimpact.data.repository.AuthRepository
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
@@ -23,7 +25,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _passwordState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val passwordState = _passwordState.asStateFlow()
 
-    private val _loginState = MutableStateFlow<AuthState<User>>(AuthState.Initial)
+    private val _loginState = MutableStateFlow<AuthState<LoginResponse>>(AuthState.Initial)
     val loginState = _loginState.asStateFlow()
 
     private val _showErrorAnimation = MutableSharedFlow<String>()
@@ -55,6 +57,12 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
             }.collectLatest { state ->
                 _loginState.value = state
             }
+        }
+    }
+
+    fun saveUserData(user: UserData) {
+        viewModelScope.launch {
+            authRepository.saveUser(user)
         }
     }
 
@@ -93,6 +101,8 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
             _showErrorAnimation.emit(error)
         }
     }
+
+
 
     fun resetStates() {
         _emailState.value = ValidationState.Initial

@@ -3,8 +3,10 @@ package com.example.schoolimpact.data.repository
 import android.util.Log
 import com.example.schoolimpact.data.api.ApiService
 import com.example.schoolimpact.data.model.ErrorResponse
+import com.example.schoolimpact.data.model.LoginResponse
 import com.example.schoolimpact.data.model.RegisterResponse
 import com.example.schoolimpact.data.model.User
+import com.example.schoolimpact.data.model.UserData
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.utils.Result
@@ -20,31 +22,32 @@ class AuthRepository private constructor(
     private val apiService: ApiService, private val authDataSource: AuthDataSource
 ) {
 
-    fun login(email: String, password: String): Flow<AuthState<User>> = flow {
+    fun login(email: String, password: String): Flow<AuthState<LoginResponse>> = flow {
         emit(AuthState.Loading)
         try {
             val emailRequestBody = email.toRequestBody("text/plain".toMediaType())
             val passwordRequestBody = password.toRequestBody("text/plain".toMediaType())
             val response = apiService.login(emailRequestBody, passwordRequestBody)
-            val userData = response.data
-            val user = User(
-                name = userData?.name.toString(), token = response.token.toString()
-            )
+            val user = response.data?.copy(token = response.token.toString())
             emit(AuthState.Success(user, response.message.toString()))
         } catch (e: HttpException) {
-            val errorResult = parseHttpException(e, TAG)
+            val errorResult = parseHttpException(e)
             emit(errorResult)
         } catch (e: IOException) {
-        emit(AuthState.Error("No Internet Connection"))
+            emit(AuthState.Error("No Internet Connection"))
             Log.e(TAG, "Network Exception : ${e.localizedMessage}")
         } catch (e: Exception) {
             Log.e(TAG, "Login : ${e.message.toString()}")
-        emit(AuthState.Error(e.message.toString()))
+            emit(AuthState.Error(e.message.toString()))
         }
     }
 
     fun register(
-        name: String, email: String, educationLevel: String, phoneNumber: String, password: String
+        name: String,
+        email: String,
+        educationLevel: String,
+        phoneNumber: String,
+        password: String
     ): Flow<AuthState<RegisterResponse>> = flow {
         emit(AuthState.Loading)
         try {
@@ -55,9 +58,10 @@ class AuthRepository private constructor(
                 phoneNumber.toRequestBody("text/plain".toMediaType()),
                 password.toRequestBody("text/plain".toMediaType())
             )
-            emit(AuthState.Success(response, response.message))
+            val user = response.data
+            emit(AuthState.Success(user, response.message))
         } catch (e: HttpException) {
-            val errorResult = parseHttpException(e, TAG)
+            val errorResult = parseHttpException(e)
             emit(errorResult)
         } catch (e: IOException) {
             emit(AuthState.Error("No Internet Connection"))
@@ -68,9 +72,9 @@ class AuthRepository private constructor(
         }
     }
 
-    suspend fun saveUser(user: User) = authDataSource.saveUser(user)
 
-    suspend fun logout() = authDataSource.logout()
+    suspend fun saveUser(user: UserData) = authDataSource.saveUser(user)
+//    suspend fun logout() = authDataSource.logout()
 
 
     fun verifyEmail(email: String): Flow<Result<String>> = flow {
@@ -81,7 +85,7 @@ class AuthRepository private constructor(
             emit(Result.Success(response.message))
 
         } catch (e: HttpException) {
-            val errorResult = parseHttpException(e, TAG)
+            val errorResult = parseHttpException(e)
 //            emit(errorResult)
         } catch (e: IOException) {
             emit(Result.Error("No Internet Connection"))
@@ -92,7 +96,7 @@ class AuthRepository private constructor(
         }
     }
 
-    private fun parseHttpException(e: HttpException, tag: String): AuthState.Error {
+    private fun parseHttpException(e: HttpException): AuthState.Error {
         val errorCode = e.code() // Retrieves the HTTP status code
         val jsonInString = e.response()?.errorBody()?.string()
         val errorBody = try {
@@ -102,7 +106,7 @@ class AuthRepository private constructor(
         }
 
         val errorMessage = errorBody?.message ?: "Unknown error"
-        Log.e(tag, "HTTP Exception [$errorCode]: $errorMessage")
+        Log.e(TAG, "HTTP Exception [$errorCode]: $errorMessage")
         return AuthState.Error(errorMessage)
     }
 
