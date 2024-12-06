@@ -1,4 +1,4 @@
-package com.example.schoolimpact.ui.main.discover.major.list
+package com.example.schoolimpact.ui.main.discover
 
 import android.os.Bundle
 import android.view.LayoutInflater

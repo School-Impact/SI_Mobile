@@ -26,7 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:context=".ui.main.discover.major.list.MajorListFragment"
+            tools:context=".ui.main.discover.major.MajorListFragment"
             tools:listitem="@layout/item_major" />
 
     </ScrollView>

@@ -8,7 +8,7 @@ import com.example.schoolimpact.data.repository.MajorRepository
 import com.example.schoolimpact.di.Injection
 import com.example.schoolimpact.ui.auth.login.LoginViewModel
 import com.example.schoolimpact.ui.auth.register.RegisterViewModel
-import com.example.schoolimpact.ui.main.discover.major.list.DiscoverViewModel
+import com.example.schoolimpact.ui.main.discover.DiscoverViewModel
 import com.example.schoolimpact.ui.main.profile.ProfileViewModel
 
 class ViewModelFactory private constructor(
