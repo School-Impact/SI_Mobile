@@ -7,6 +7,7 @@ import com.example.schoolimpact.data.repository.AuthRepository
 import com.example.schoolimpact.di.Injection
 import com.example.schoolimpact.ui.auth.login.LoginViewModel
 import com.example.schoolimpact.ui.auth.register.RegisterViewModel
+import com.example.schoolimpact.ui.main.profile.ProfileViewModel
 
 class ViewModelFactory private constructor(
     private val authRepository: AuthRepository,
@@ -25,6 +26,10 @@ class ViewModelFactory private constructor(
 
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(authRepository) as T
+            }
+
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(authRepository) as T
             }
 
             else -> null

@@ -139,7 +139,7 @@ class RegisterFragment : Fragment() {
             is AuthState.Loading -> showLoading(true)
             is AuthState.Success<*> -> {
                 showLoading(false)
-                showSnackBar(getString(R.string.success_login))
+                showSnackBar(state.message)
                 navigateBackToLogin()
             }
 
@@ -196,8 +196,6 @@ class RegisterFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.etEmail.text?.clear()
-        binding.etPassword.text?.clear()
         viewModel.resetStates()
     }
 

@@ -6,9 +6,11 @@ import kotlinx.parcelize.Parcelize
 
 data class RegisterResponse(
 
+    @field:SerializedName("message") val message: String,
+
     @field:SerializedName("error") val error: Boolean? = false,
 
-    @field:SerializedName("message") val message: String
+    val data: UserData? = null
 )
 
 @Parcelize
@@ -32,7 +34,10 @@ data class UserData(
 
     @field:SerializedName("image") val image: String? = null,
 
-    @field:SerializedName("phone_number") val phoneNumber: String? = null
+    @field:SerializedName("phone_number") val phoneNumber: String? = null,
+
+    val token: String = ""
+
 ) : Parcelable
 
 @Parcelize
@@ -43,7 +48,6 @@ data class EmailResponse(
 
 data class ErrorResponse(
     @field:SerializedName("error") val error: Boolean? = null,
-
     @field:SerializedName("message") val message: String? = null
 )
 

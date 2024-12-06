@@ -16,17 +16,21 @@ import androidx.navigation.fragment.findNavController
 import com.example.schoolimpact.MainActivity
 import com.example.schoolimpact.R
 import com.example.schoolimpact.ViewModelFactory
+import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.databinding.FragmentLoginBinding
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var viewModel: LoginViewModel
+    private lateinit var authDataSource: AuthDataSource
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,6 +41,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authDataSource = AuthDataSource(requireContext())
         setupViewModel()
         setupListeners()
         observeStates()
@@ -85,6 +90,7 @@ class LoginFragment : Fragment() {
     private fun handleEmailState(state: ValidationState) {
         binding.emailInputLayout.error =
             if (state is ValidationState.Invalid) state.message else null
+
     }
 
     private fun handlePasswordState(state: ValidationState) {
@@ -98,7 +104,11 @@ class LoginFragment : Fragment() {
             is AuthState.Loading -> showLoading(true)
             is AuthState.Success<*> -> {
                 showLoading(false)
-                showSnackBar(getString(R.string.success_login))
+                lifecycleScope.launch {
+                    authDataSource.saveUser(state.user)
+                }
+                showSnackBar(state.message)
+                navigateToMain()
             }
 
             is AuthState.Error -> {
@@ -140,8 +150,6 @@ class LoginFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.etEmail.text?.clear()
-        binding.etPassword.text?.clear()
         viewModel.resetStates()
     }
 
