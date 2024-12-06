@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class MajorViewModel(private val repository: MajorRepository) : ViewModel() {
+class DiscoverViewModel(private val repository: MajorRepository) : ViewModel() {
     private val _majors = MutableStateFlow<Result<List<ListMajorItem>>>(Result.Loading)
     val majors = _majors.asStateFlow()
 

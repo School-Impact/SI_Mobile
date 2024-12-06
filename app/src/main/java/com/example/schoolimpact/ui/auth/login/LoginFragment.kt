@@ -21,7 +21,6 @@ import com.example.schoolimpact.databinding.FragmentLoginBinding
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -63,7 +62,6 @@ class LoginFragment : Fragment() {
 
             btnToRegister.setOnClickListener {
                 findNavController().navigate(R.id.action_navigation_login_to_navigation_registration)
-//                findNavController().navigate(R.id.action_navigation_login_to_navigation_email_verification)
             }
         }
     }

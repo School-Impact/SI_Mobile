@@ -7,7 +7,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.schoolimpact.MainActivity
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.ui.auth.AuthActivity
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {

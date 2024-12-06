@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.schoolimpact.databinding.FragmentMajorBinding
+import com.example.schoolimpact.databinding.FragmentDiscoverBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MajorFragment : Fragment() {
-    private var _binding: FragmentMajorBinding? = null
+class DiscoverFragment : Fragment() {
+    private var _binding: FragmentDiscoverBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -17,7 +17,7 @@ class MajorFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMajorBinding.inflate(inflater, container, false)
+        _binding = FragmentDiscoverBinding.inflate(inflater, container, false)
         return binding.root
     }
 
