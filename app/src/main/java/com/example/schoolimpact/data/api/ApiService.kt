@@ -4,6 +4,7 @@ import com.example.schoolimpact.data.model.EmailResponse
 import com.example.schoolimpact.data.model.LoginResponse
 import com.example.schoolimpact.data.model.MajorDetailResponse
 import com.example.schoolimpact.data.model.MajorResponse
+import com.example.schoolimpact.data.model.MlResponse
 import com.example.schoolimpact.data.model.RegisterResponse
 import okhttp3.RequestBody
 import retrofit2.http.GET
@@ -50,13 +51,11 @@ interface ApiService {
     ): MajorDetailResponse
 
 
-
-
-//    @POST("user/predict")
-//    @Multipart
-//    suspend fun postInterest(
-//        @Header("Authorization") token: String,
-//        @Part interest: RequestBody
-//    ):
+    @POST("user/predict")
+    @Multipart
+    suspend fun postInterest(
+        @Header("Authorization") token: String,
+        @Part interest: RequestBody
+    ): MlResponse
 
 }
