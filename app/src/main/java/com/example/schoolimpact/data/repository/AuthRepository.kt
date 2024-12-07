@@ -5,7 +5,6 @@ import com.example.schoolimpact.data.api.ApiService
 import com.example.schoolimpact.data.model.ErrorResponse
 import com.example.schoolimpact.data.model.LoginResponse
 import com.example.schoolimpact.data.model.RegisterResponse
-import com.example.schoolimpact.data.model.User
 import com.example.schoolimpact.data.model.UserData
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.ui.auth.AuthState
@@ -94,7 +93,6 @@ class AuthRepository private constructor(
     suspend fun saveUser(user: UserData) = authDataSource.saveUser(user)
 
     suspend fun logout() = authDataSource.logout()
-
 
 
     private fun parseHttpException(e: HttpException): AuthState.Error {

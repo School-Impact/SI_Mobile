@@ -45,7 +45,6 @@ android {
 
 dependencies {
 
-    implementation("androidx.cardview:cardview:1.0.0")
 
     implementation(libs.material)
     implementation(libs.androidx.activity)
@@ -54,6 +53,7 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
+    implementation(libs.androidx.cardview)
 
     // Android Jetpack components
     implementation(libs.androidx.core.ktx)

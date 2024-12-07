@@ -30,8 +30,4 @@
         android:name="com.example.schoolimpact.ui.main.discover.detail.MajorDetailFragment"
         android:label="@string/title_major_detail"
         tools:layout="@layout/fragment_major_detail" />
-    <fragment
-        android:id="@+id/majorListFragment"
-        android:name="com.example.schoolimpact.ui.main.discover.major.MajorListFragment"
-        android:label="MajorListFragment" />
 </navigation>
