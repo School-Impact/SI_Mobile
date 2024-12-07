@@ -85,9 +85,12 @@ class MajorListFragment : Fragment() {
 
     private fun navigateToMajorDetail(majorItem: ListMajorItem) {
         val bundle = Bundle().apply {
-            putString("story_id", majorItem.id.toString())
+            putInt("major_id", majorItem.id ?: 0)
         }
-        findNavController().navigate(R.id.action_navigation_discover_to_navigation_detail_major, bundle)
+        findNavController().navigate(
+            R.id.action_navigation_discover_to_navigation_detail_major,
+            bundle
+        )
     }
 
 

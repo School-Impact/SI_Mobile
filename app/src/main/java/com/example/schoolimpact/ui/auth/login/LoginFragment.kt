@@ -142,9 +142,9 @@ class LoginFragment : Fragment() {
         showSnackBar(message)
     }
 
-    private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
-    }
+        private fun showSnackBar(message: String) {
+            Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+        }
 
     override fun onResume() {
         super.onResume()
