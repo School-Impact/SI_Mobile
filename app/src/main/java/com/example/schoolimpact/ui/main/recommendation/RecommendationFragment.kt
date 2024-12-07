@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.example.schoolimpact.data.model.MlResultData
 import com.example.schoolimpact.databinding.FragmentRecommendationBinding
-import com.example.schoolimpact.utils.Result
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -37,12 +37,23 @@ class RecommendationFragment : Fragment() {
 
         with(binding) {
             btnResult.setOnClickListener {
-                val interest = etEssay.text.toString()
-                if (interest.isNotEmpty()) {
-                    viewModel.postInterest()
+                val interest = etEssay.text.toString().trim()
+                if (interest.isBlank()) {
+                    essayInputLayout.error = "Interest data is required!"
+                } else {
+                    essayInputLayout.error = null
+                    viewModel.postInterest(interest)
                 }
 
             }
+        }
+    }
+
+    private fun showRecommendationResult(result: MlResultData) {
+        val recommendationResult = result.majors
+        binding.apply {
+            tvResult.text = recommendationResult
+            tvResult.visibility = View.VISIBLE
         }
     }
 
@@ -50,16 +61,19 @@ class RecommendationFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.interestResult.collectLatest { result ->
                 when (result) {
-                    is Result.Loading -> showLoading(true)
-                    is Result.Error -> {
+                    MlResult.Initial -> Unit
+                    is MlResult.Loading -> showLoading(true)
+                    is MlResult.Success -> {
+                        showLoading(false)
+                        showSnackBar(result.message)
+                        showRecommendationResult(result.data.mlResult)
+                    }
+
+                    is MlResult.Error -> {
                         showLoading(false)
                         showSnackBar(result.error)
                     }
-                    is Result.Success -> {
-                        showSnackBar(result.data)
-                    }
 
-                    null -> TODO()
                 }
             }
         }

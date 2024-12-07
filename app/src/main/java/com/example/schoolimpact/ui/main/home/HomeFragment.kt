@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.schoolimpact.R
 import com.example.schoolimpact.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -25,6 +27,18 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnRecommendation.setOnClickListener {
+            navigateToRecommendation()
+        }
+    }
+
+    private fun navigateToRecommendation() {
+        findNavController().navigate(R.id.action_navigation_home_to_navigation_recommendation)
     }
 
     override fun onDestroyView() {
