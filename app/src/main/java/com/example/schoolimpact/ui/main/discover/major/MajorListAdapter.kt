@@ -2,6 +2,8 @@ package com.example.schoolimpact.ui.main.discover.major
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schoolimpact.data.model.ListMajorItem
 import com.example.schoolimpact.databinding.ItemMajorBinding
@@ -9,15 +11,7 @@ import com.example.schoolimpact.databinding.ItemMajorBinding
 
 class MajorListAdapter(
     private val onClick: (ListMajorItem) -> Unit
-) : RecyclerView.Adapter<MajorListAdapter.MajorViewHolder>() {
-
-    private var majors = listOf<ListMajorItem>()
-
-    fun submitList(newList: List<ListMajorItem>) {
-        majors = newList
-        notifyDataSetChanged()
-    }
-
+) : ListAdapter<ListMajorItem,MajorListAdapter.MajorViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MajorViewHolder {
         val binding = ItemMajorBinding.inflate(
@@ -29,10 +23,8 @@ class MajorListAdapter(
     }
 
     override fun onBindViewHolder(holder: MajorViewHolder, position: Int) {
-        holder.bind(majors[position])
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount() = majors.size
 
     class MajorViewHolder(
         private val binding: ItemMajorBinding,
@@ -42,6 +34,18 @@ class MajorListAdapter(
             binding.apply {
                 tvName.text = majorItem.name
                 itemView.setOnClickListener { onClick(majorItem) }
+            }
+        }
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListMajorItem>() {
+            override fun areItemsTheSame(oldItem: ListMajorItem, newItem: ListMajorItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: ListMajorItem, newItem: ListMajorItem): Boolean {
+                return oldItem == newItem
             }
         }
     }

@@ -2,13 +2,11 @@ package com.example.schoolimpact.ui.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.schoolimpact.data.AuthResult
 import com.example.schoolimpact.data.model.LoginResponse
-import com.example.schoolimpact.data.model.User
-import com.example.schoolimpact.data.model.UserData
 import com.example.schoolimpact.data.repository.AuthRepository
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
-import com.example.schoolimpact.utils.Result
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -47,33 +45,38 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     fun login() {
         viewModelScope.launch {
-            if (!validateCredentials()) {
-                handleError("Invalid credentials")
-                return@launch
-            }
-            _loginState.value = AuthState.Loading
-            authRepository.login(currentEmail, currentPassword).catch { e ->
-                _loginState.value = AuthState.Error(e.message.toString())
-            }.collectLatest { state ->
-                _loginState.value = state
+            when (val result = validateCredentials()) {
+                is AuthResult.Error -> handleError(result.message)
+                is AuthResult.Success -> {
+                    _loginState.value = AuthState.Loading
+                    authRepository.login(currentEmail, currentPassword)
+                        .catch { e ->
+                            _loginState.value = AuthState.Error(e.message.toString())
+                        }
+                        .collectLatest { state ->
+                            _loginState.value = state
+                        }
+                }
             }
         }
     }
 
-    fun saveUserData(user: UserData) {
-        viewModelScope.launch {
-            authRepository.saveUser(user)
-        }
-    }
-
-    private fun validateCredentials(): Boolean {
+    private fun validateCredentials(): AuthResult {
         val emailValidation = validateEmail(currentEmail)
         val passwordValidation = validatePassword(currentPassword)
 
         _emailState.value = emailValidation
         _passwordState.value = passwordValidation
 
-        return emailValidation is ValidationState.Valid && passwordValidation is ValidationState.Valid
+        return when {
+            emailValidation is ValidationState.Invalid ->
+                AuthResult.Error(emailValidation.message)
+
+            passwordValidation is ValidationState.Invalid ->
+                AuthResult.Error(passwordValidation.message)
+
+            else -> AuthResult.Success
+        }
     }
 
     private fun validateEmail(email: String): ValidationState {
@@ -101,7 +104,6 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
             _showErrorAnimation.emit(error)
         }
     }
-
 
 
     fun resetStates() {

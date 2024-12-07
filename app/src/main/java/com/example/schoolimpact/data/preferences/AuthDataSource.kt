@@ -6,13 +6,19 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.schoolimpact.data.model.User
 import com.example.schoolimpact.data.model.UserData
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
 val Context.AuthDataStore by preferencesDataStore(name = "auth_prefs")
 
-class AuthDataSource(context: Context) {
+@Singleton
+class AuthDataSource @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     private val authDataStore = context.AuthDataStore
 

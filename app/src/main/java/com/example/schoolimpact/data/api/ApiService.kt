@@ -2,6 +2,7 @@ package com.example.schoolimpact.data.api
 
 import com.example.schoolimpact.data.model.EmailResponse
 import com.example.schoolimpact.data.model.LoginResponse
+import com.example.schoolimpact.data.model.MajorDetailResponse
 import com.example.schoolimpact.data.model.MajorResponse
 import com.example.schoolimpact.data.model.RegisterResponse
 import okhttp3.RequestBody
@@ -11,6 +12,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -41,6 +43,14 @@ interface ApiService {
     suspend fun getMajorList(
         @Header("Authorization") token: String, @Query("category") category: String
     ): MajorResponse
+
+    @GET("user/majorsDetail/{id}")
+    suspend fun getMajorDetail(
+        @Header("Authorization") token: String, @Path("id") id: Int
+    ): MajorDetailResponse
+
+
+
 
 //    @POST("user/predict")
 //    @Multipart

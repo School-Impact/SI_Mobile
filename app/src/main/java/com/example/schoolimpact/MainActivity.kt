@@ -10,12 +10,12 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
-    private lateinit var authDataSource: AuthDataSource
 
     private lateinit var navController: NavController
 
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(

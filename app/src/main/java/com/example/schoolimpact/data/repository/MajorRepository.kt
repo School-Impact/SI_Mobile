@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.schoolimpact.data.api.ApiService
 import com.example.schoolimpact.data.model.ErrorResponse
 import com.example.schoolimpact.data.model.ListMajorItem
+import com.example.schoolimpact.data.model.MajorDetailItem
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.utils.Result
 import com.google.gson.Gson
@@ -12,9 +13,10 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
 
-class MajorRepository private constructor(
+class MajorRepository @Inject constructor(
     private val apiService: ApiService, private val authDataSource: AuthDataSource
 ) {
 
@@ -34,6 +36,25 @@ class MajorRepository private constructor(
             Log.e(TAG, "Network Exception: ${e.localizedMessage}")
         } catch (e: Exception) {
             Log.e(TAG, "Major : ${e.message.toString()}")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun getMajorDetail(id: Int): Flow<Result<List<MajorDetailItem>>> = flow {
+        emit(Result.Loading)
+        try {
+            val token = getToken() ?: throw Exception("Token not found")
+            val bearerToken = "Bearer $token"
+            val response = apiService.getMajorDetail(bearerToken, id).data
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorResult = parseHttpException(e)
+            emit(errorResult)
+        } catch (e: IOException) {
+            emit(Result.Error("No Internet Connection"))
+            Log.e(TAG, "Network Exception: ${e.localizedMessage}")
+        } catch (e: Exception) {
+            Log.e(TAG, "Major Detail : ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
         }
     }
@@ -67,7 +88,7 @@ class MajorRepository private constructor(
         fun getInstance(
             apiService: ApiService, authDataSource: AuthDataSource
         ): MajorRepository = instance ?: synchronized(this) {
-            instance ?: MajorRepository(apiService,authDataSource)
+            instance ?: MajorRepository(apiService, authDataSource)
         }.also { instance = it }
     }
 

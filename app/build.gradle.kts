@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-parcelize")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -17,7 +19,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "BASE_URL", "\"https://school-impact-324161780977.asia-southeast2.run.app/\"")
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"https://school-impact-324161780977.asia-southeast2.run.app/\""
+        )
 
     }
 
@@ -45,7 +51,6 @@ android {
 
 dependencies {
 
-    implementation("androidx.cardview:cardview:1.0.0")
 
     implementation(libs.material)
     implementation(libs.androidx.activity)
@@ -54,6 +59,7 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
+    implementation(libs.androidx.cardview)
 
     // Android Jetpack components
     implementation(libs.androidx.core.ktx)
@@ -81,8 +87,9 @@ dependencies {
     // Firebase
     implementation(libs.firebase.auth.ktx)
 
-    implementation (libs.androidx.viewpager2)
+    implementation(libs.androidx.viewpager2)
 
-
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
 }
