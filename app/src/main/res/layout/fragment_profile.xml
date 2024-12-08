@@ -7,15 +7,18 @@
     tools:context=".ui.main.profile.ProfileFragment">
 
     <!-- Profile Image -->
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/img_profile"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/profile_image"
         app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_profile_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/CircularImageView"
         app:layout_constraintBottom_toTopOf="@+id/tv_username" />
 
     <!-- Username -->
@@ -45,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_username" />
 
     <!-- Edit Button -->
-    <ImageButton
+    <ImageView
         android:id="@+id/btn_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
