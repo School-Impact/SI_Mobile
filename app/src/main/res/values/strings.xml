@@ -37,4 +37,10 @@
     <string name="title_recommendation">Recommendation</string>
     <string name="placeholder_btn_result">Submit</string>
     <string name="placeholder_ml_title">Apa yang kamu suka saat ini?</string>
+    <string name="dark_theme">dark theme</string>
+    <string name="edit_profile">edit profile\n</string>
+    <string name="user_email">user email</string>
+    <string name="username">username</string>
+    <string name="profile_image">profile image</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>
