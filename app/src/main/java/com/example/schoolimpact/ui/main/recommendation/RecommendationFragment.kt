@@ -7,6 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.schoolimpact.R
+import com.example.schoolimpact.data.model.ListMajorItem
 import com.example.schoolimpact.data.model.MlResultData
 import com.example.schoolimpact.databinding.FragmentRecommendationBinding
 import com.google.android.material.snackbar.Snackbar
@@ -19,6 +23,8 @@ class RecommendationFragment : Fragment() {
 
     private var _binding: FragmentRecommendationBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var resultAdapter: ResultAdapter
 
     private val viewModel: RecommendationViewModel by viewModels()
 
@@ -33,6 +39,7 @@ class RecommendationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupRecyclerView()
         setupObservers()
 
         with(binding) {
@@ -49,12 +56,22 @@ class RecommendationFragment : Fragment() {
         }
     }
 
-    private fun showRecommendationResult(result: MlResultData) {
-        val recommendationResult = result.majors
-        binding.apply {
-            tvResult.text = recommendationResult
-            tvResult.visibility = View.VISIBLE
+    private fun setupRecyclerView() {
+        resultAdapter = ResultAdapter { majorItem ->
+            navigateToMajorDetail(majorItem)
         }
+        binding.rvListMajor.apply {
+            adapter = resultAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    private fun showRecommendationResult(result: MlResultData) {
+        val majorItem = ListMajorItem(
+            id = result.userId,
+            name = result.majors,
+        )
+        resultAdapter.submitList(listOf(majorItem))
     }
 
     private fun setupObservers() {
@@ -77,6 +94,20 @@ class RecommendationFragment : Fragment() {
                 }
             }
         }
+    }
+
+//    private val majorId: Int by lazy {
+//        arguments?.getInt("major_id", 0) ?: 0
+//    }
+
+    private fun navigateToMajorDetail(majorItem: ListMajorItem) {
+        val bundle = Bundle().apply {
+            putInt("major_id", majorItem.id ?: 0)
+        }
+        findNavController().navigate(
+            R.id.action_navigation_recommendation_to_navigation_detail_major,
+            bundle
+        )
     }
 
     private fun showLoading(isLoading: Boolean) {

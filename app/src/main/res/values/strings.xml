@@ -35,4 +35,6 @@
         dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         Duis aute irure dolor in reprehenderit in voluptate velit esse.</string>
     <string name="title_recommendation">Recommendation</string>
+    <string name="placeholder_btn_result">Submit</string>
+    <string name="placeholder_ml_title">Apa yang kamu suka saat ini?</string>
 </resources>
