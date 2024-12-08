@@ -45,7 +45,6 @@ class MajorDetailFragment : Fragment() {
                         showLoading(false)
                         showMajorDetail(result.data)
                     }
-
                     is Result.Error -> {
                         showLoading(false)
                         showSnackBar(result.error)

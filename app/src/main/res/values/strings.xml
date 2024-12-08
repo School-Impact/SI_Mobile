@@ -31,7 +31,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="item_major_name_placeholder">List item</string>
     <string name="title_major_detail">Major Detail</string>
-    <string name="placeholder_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+    <string name="placeholder_lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
         dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         Duis aute irure dolor in reprehenderit in voluptate velit esse.</string>
+    <string name="title_recommendation">Recommendation</string>
+    <string name="placeholder_btn_result">Submit</string>
+    <string name="placeholder_ml_title">Apa yang kamu suka saat ini?</string>
 </resources>

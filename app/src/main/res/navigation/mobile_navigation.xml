@@ -8,7 +8,11 @@
         android:id="@+id/navigation_home"
         android:name="com.example.schoolimpact.ui.main.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_recommendation"
+            app:destination="@id/navigation_recommendation" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_discover"
@@ -30,4 +34,13 @@
         android:name="com.example.schoolimpact.ui.main.discover.detail.MajorDetailFragment"
         android:label="@string/title_major_detail"
         tools:layout="@layout/fragment_major_detail" />
+    <fragment
+        android:id="@+id/navigation_recommendation"
+        android:name="com.example.schoolimpact.ui.main.recommendation.RecommendationFragment"
+        android:label="@string/title_recommendation"
+        tools:layout="@layout/fragment_recommendation" >
+        <action
+            android:id="@+id/action_navigation_recommendation_to_navigation_detail_major"
+            app:destination="@id/navigation_detail_major" />
+    </fragment>
 </navigation>
