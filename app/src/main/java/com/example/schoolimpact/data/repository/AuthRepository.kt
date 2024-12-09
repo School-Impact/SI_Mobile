@@ -76,12 +76,15 @@ class AuthRepository @Inject constructor(
         emit(Result.Loading)
         try {
             val emailRequestBody = email.toRequestBody("text/plain".toMediaType())
-            val response = apiService.verifyEmail(emailRequestBody)
-            emit(Result.Success(response.message))
+            val response = apiService.verifyEmail(emailRequestBody).message
+            emit(Result.Success(response))
 
         } catch (e: HttpException) {
-            val errorResult = parseHttpException(e)
-//            emit(errorResult)
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+            Log.e(TAG, "Verify email : $errorMessage")
         } catch (e: IOException) {
             emit(Result.Error("No Internet Connection"))
             Log.e(TAG, "Network Exception: ${e.localizedMessage}")
@@ -112,13 +115,5 @@ class AuthRepository @Inject constructor(
 
     companion object {
         const val TAG = "Auth Repository"
-
-//        @Volatile
-//        private var instance: AuthRepository? = null
-//        fun getInstance(
-//            apiService: ApiService, authDataSource: AuthDataSource
-//        ): AuthRepository = instance ?: synchronized(this) {
-//            instance ?: AuthRepository(apiService, authDataSource)
-//        }.also { instance = it }
     }
 }

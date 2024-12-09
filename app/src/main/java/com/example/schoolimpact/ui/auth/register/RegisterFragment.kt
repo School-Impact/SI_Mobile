@@ -55,7 +55,7 @@ class RegisterFragment : Fragment() {
         }
 
     }
-    
+
     private fun setupListeners() {
         with(binding) {
             setupTextWatcher(etName) { viewModel.updateName(it) }
@@ -200,7 +200,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onResume() {
