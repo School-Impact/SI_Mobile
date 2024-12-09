@@ -7,7 +7,6 @@
         android:id="@+id/iv_onboarding"
         android:layout_width="0dp"
         android:layout_height="400dp"
-        android:contentDescription="Onboarding Image"
         android:scaleType="centerCrop"
         android:src="@drawable/onboarding_image1"
         app:layout_constraintBottom_toTopOf="@id/tvTitle"

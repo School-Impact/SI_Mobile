@@ -27,7 +27,6 @@
             android:name=".ui.auth.register.RegisterActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
@@ -37,11 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!--        <activity-->
-        <!--            android:name=".ui.auth.AuthActivity"-->
-        <!--            android:exported="false"-->
-        <!--            android:windowSoftInputMode="adjustPan" />-->
         <activity
             android:name=".MainActivity"
             android:exported="true" />

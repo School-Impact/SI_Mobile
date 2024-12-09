@@ -62,6 +62,7 @@ class ProfileFragment : Fragment() {
 
                                 ivProfile.load(user.image) {
                                     placeholder(R.drawable.ic_profile_placeholder)
+                                    error(R.drawable.ic_profile_placeholder)
                                     transformations(CircleCropTransformation())
                                 }
                             }
