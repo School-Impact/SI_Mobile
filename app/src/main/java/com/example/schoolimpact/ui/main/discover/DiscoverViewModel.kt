@@ -3,15 +3,20 @@ package com.example.schoolimpact.ui.main.discover
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schoolimpact.data.model.ListMajorItem
+import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.data.repository.MajorRepository
 import com.example.schoolimpact.utils.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class DiscoverViewModel(private val repository: MajorRepository) : ViewModel() {
+@HiltViewModel
+class DiscoverViewModel @Inject constructor(
+    private val repository: MajorRepository, private val authDataSource: AuthDataSource
+) : ViewModel() {
     private val _majors = MutableStateFlow<Result<List<ListMajorItem>>>(Result.Loading)
     val majors = _majors.asStateFlow()
 

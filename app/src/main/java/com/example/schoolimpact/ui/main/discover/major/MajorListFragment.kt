@@ -5,26 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.schoolimpact.R
-import com.example.schoolimpact.ViewModelFactory
 import com.example.schoolimpact.data.model.ListMajorItem
 import com.example.schoolimpact.databinding.FragmentMajorListBinding
 import com.example.schoolimpact.ui.main.discover.DiscoverViewModel
 import com.example.schoolimpact.utils.Result
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+
+@AndroidEntryPoint
 class MajorListFragment : Fragment() {
 
     private var _binding: FragmentMajorListBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: DiscoverViewModel
+    private val viewModel: DiscoverViewModel by viewModels()
     private lateinit var majorListAdapter: MajorListAdapter
 
 
@@ -40,7 +42,6 @@ class MajorListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        setupViewModel()
         observeStates()
 
         arguments?.getString(ARG_CATEGORY)?.let { category ->
@@ -57,11 +58,6 @@ class MajorListFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = majorListAdapter
         }
-    }
-
-    private fun setupViewModel() {
-        val factory = ViewModelFactory.getInstance(requireActivity())
-        viewModel = ViewModelProvider(this, factory)[DiscoverViewModel::class.java]
     }
 
     private fun observeStates() {

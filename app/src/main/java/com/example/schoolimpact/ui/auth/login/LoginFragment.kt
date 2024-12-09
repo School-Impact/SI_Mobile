@@ -16,7 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.schoolimpact.MainActivity
 import com.example.schoolimpact.R
-import com.example.schoolimpact.ViewModelFactory
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.databinding.FragmentLoginBinding
 import com.example.schoolimpact.ui.auth.AuthState

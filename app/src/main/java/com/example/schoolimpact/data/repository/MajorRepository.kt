@@ -82,14 +82,6 @@ class MajorRepository @Inject constructor(
 
     companion object {
         const val TAG = "Major Repository"
-
-        @Volatile
-        private var instance: MajorRepository? = null
-        fun getInstance(
-            apiService: ApiService, authDataSource: AuthDataSource
-        ): MajorRepository = instance ?: synchronized(this) {
-            instance ?: MajorRepository(apiService, authDataSource)
-        }.also { instance = it }
     }
 
 }
