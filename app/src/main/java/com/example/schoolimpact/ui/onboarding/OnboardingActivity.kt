@@ -1,91 +1,56 @@
 package com.example.schoolimpact.ui.onboarding
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import com.example.schoolimpact.R
-import com.example.schoolimpact.data.model.OnboardingItem
 import com.example.schoolimpact.databinding.ActivityOnboardingBinding
-import com.example.schoolimpact.ui.main.discover.major.MajorListAdapter
+import com.example.schoolimpact.ui.auth.AuthActivity
+import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOnboardingBinding
+    private lateinit var viewPager: ViewPager2
     private lateinit var onboardingAdapter: OnboardingAdapter
+    private val onboardingViewModel: OnboardingViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setOnboardingItems()
-        setupIndicators()
-        setCurrentIndicator(0)
 
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                setCurrentIndicator(position)
-            }
-        })
+        setupAdapter()
+        setOnboardingItems()
+
+        TabLayoutMediator(binding.indicator, viewPager) { _, _ -> }.attach()
+
+        binding.btnSignUp.setOnClickListener { navigateToAuthScreen() }
+        binding.btnSignIn.setOnClickListener { navigateToAuthScreen() }
+    }
+
+    private fun setupAdapter() {
+        onboardingAdapter = OnboardingAdapter()
+        viewPager = binding.viewPager
+        viewPager.adapter = onboardingAdapter
     }
 
     private fun setOnboardingItems() {
-        onboardingAdapter = OnboardingAdapter()
-        onboardingAdapter.submitList(
-            listOf(
-                OnboardingItem("Welcome", "Welcome to our app!"),
-                OnboardingItem("Features", "Discover amazing features"),
-                OnboardingItem("Get Started", "Let's begin your journey")
-            )
-        )
-        binding.viewPager.adapter = onboardingAdapter
-    }
-
-    private fun setupIndicators() {
-        val indicators = arrayOfNulls<ImageView>(onboardingAdapter.itemCount)
-        val layoutParams: LinearLayout.LayoutParams =
-            LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-        layoutParams.setMargins(8, 0, 8, 0)
-        for (i in indicators.indices) {
-            indicators[i] = ImageView(applicationContext)
-            indicators[i]?.let {
-                it.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.indicator_inactive
-                    )
-                )
-                it.layoutParams = layoutParams
-                binding.layoutDots.addView(it)
+        lifecycleScope.launch {
+            onboardingViewModel.onboardingItem.collectLatest { items ->
+                onboardingAdapter.submitList(items)
             }
         }
     }
 
-    private fun setCurrentIndicator(position: Int) {
-        val childCount = binding.layoutDots.childCount
-        for (i in 0 until childCount) {
-            val imageView = binding.layoutDots.getChildAt(i) as ImageView
-            if (i == position) {
-                imageView.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.indicator_active
-                    )
-                )
-            } else {
-                imageView.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.indicator_inactive
-                    )
-                )
-            }
-        }
+    private fun navigateToAuthScreen() {
+        startActivity(Intent(this, AuthActivity::class.java))
+        finish()
     }
 }
