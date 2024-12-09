@@ -17,13 +17,6 @@ object Injection {
         return AuthDataSource(context)
     }
 
-    fun provideAuthRepository(context: Context): AuthRepository {
-        val apiService = provideApiService()
-        val authDataSource = provideAuthDataSource(context)
-
-        return AuthRepository.getInstance(apiService, authDataSource)
-    }
-
     fun provideMajorRepository(context: Context): MajorRepository {
         val apiService = provideApiService()
         val authDataSource = provideAuthDataSource(context)

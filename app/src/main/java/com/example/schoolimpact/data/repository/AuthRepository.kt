@@ -5,7 +5,6 @@ import com.example.schoolimpact.data.api.ApiService
 import com.example.schoolimpact.data.model.ErrorResponse
 import com.example.schoolimpact.data.model.LoginResponse
 import com.example.schoolimpact.data.model.RegisterResponse
-import com.example.schoolimpact.data.model.UserData
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.utils.Result
@@ -16,8 +15,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.IOException
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class AuthRepository private constructor(
+
+class AuthRepository @Inject constructor(
     private val apiService: ApiService, private val authDataSource: AuthDataSource
 ) {
 
@@ -90,14 +91,13 @@ class AuthRepository private constructor(
         }
     }
 
-    suspend fun saveUser(user: UserData) = authDataSource.saveUser(user)
-
     suspend fun logout() = authDataSource.logout()
 
 
     private fun parseHttpException(e: HttpException): AuthState.Error {
         val errorCode = e.code() // Retrieves the HTTP status code
         val jsonInString = e.response()?.errorBody()?.string()
+        Log.e(TAG, "Error Body: $jsonInString")
         val errorBody = try {
             Gson().fromJson(jsonInString, ErrorResponse::class.java)
         } catch (ex: Exception) {
@@ -113,12 +113,12 @@ class AuthRepository private constructor(
     companion object {
         const val TAG = "Auth Repository"
 
-        @Volatile
-        private var instance: AuthRepository? = null
-        fun getInstance(
-            apiService: ApiService, authDataSource: AuthDataSource
-        ): AuthRepository = instance ?: synchronized(this) {
-            instance ?: AuthRepository(apiService, authDataSource)
-        }.also { instance = it }
+//        @Volatile
+//        private var instance: AuthRepository? = null
+//        fun getInstance(
+//            apiService: ApiService, authDataSource: AuthDataSource
+//        ): AuthRepository = instance ?: synchronized(this) {
+//            instance ?: AuthRepository(apiService, authDataSource)
+//        }.also { instance = it }
     }
 }
