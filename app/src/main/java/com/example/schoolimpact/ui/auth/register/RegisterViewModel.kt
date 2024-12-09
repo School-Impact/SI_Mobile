@@ -6,13 +6,18 @@ import com.example.schoolimpact.data.repository.AuthRepository
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
 import com.example.schoolimpact.utils.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _nameState = MutableStateFlow<ValidationState>(ValidationState.Initial)
     val nameState = _nameState.asStateFlow()

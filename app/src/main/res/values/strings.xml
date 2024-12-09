@@ -19,8 +19,7 @@
     <string name="placeholder_toolbar_title">Title</string>
     <string name="tv_no_account_yet">If you don\'t have an account yet?</string>
     <string name="placeholder_name">Name</string>
-    <string name="education_level">Education Level</string>
-    <string name="placeholder_education">Kelas 1</string>
+    <string name="placeholder_education">Education Level</string>
     <string name="placeholder_phone_number">Phone Number</string>
     <string name="prompt_name">John Doe</string>
     <string name="success_login">Login Successfully</string>
@@ -43,4 +42,5 @@
     <string name="username">username</string>
     <string name="profile_image">profile image</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="placeholder_program">Program</string>
 </resources>

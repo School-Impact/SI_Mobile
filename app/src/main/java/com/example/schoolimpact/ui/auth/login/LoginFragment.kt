@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -21,14 +22,16 @@ import com.example.schoolimpact.databinding.FragmentLoginBinding
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by viewModels()
     private lateinit var authDataSource: AuthDataSource
 
     override fun onCreateView(
@@ -41,14 +44,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         authDataSource = AuthDataSource(requireContext())
-        setupViewModel()
         setupListeners()
         observeStates()
-    }
-
-    private fun setupViewModel() {
-        val factory = ViewModelFactory.getInstance(requireActivity())
-        viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
     }
 
     private fun setupListeners() {
@@ -65,6 +62,7 @@ class LoginFragment : Fragment() {
             }
         }
     }
+
 
     private fun observeStates() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -128,9 +126,21 @@ class LoginFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
-        binding.btnLogin.isEnabled = !isLoading
+        binding.apply {
+            loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+
+            if (isLoading) {
+                loadingAnimation.playAnimation()
+                loadingAnimation.animate()
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start()
+            } else {
+                loadingAnimation.pauseAnimation()
+            }
+        }
     }
+
 
     private fun showErrorAnimations(view: View, message: String) {
         view.requestFocus()

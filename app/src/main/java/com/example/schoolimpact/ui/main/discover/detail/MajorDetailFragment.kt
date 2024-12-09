@@ -1,5 +1,8 @@
 package com.example.schoolimpact.ui.main.discover.detail
 
+import android.annotation.SuppressLint
+import android.graphics.text.LineBreaker
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,18 +36,33 @@ class MajorDetailFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("InlinedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val majorId = arguments?.getInt("major_id") ?: return
         viewModel.getMajorDetail(majorId)
 
+        setupAdapter()
+        observeStates()
+
+    }
+
+    private fun setupAdapter() {
         programAdapter = ProgramAdapter()
         binding.rvPrograms.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = programAdapter
         }
+        binding.tvMajorDescription.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
+            }
+            textAlignment = View.TEXT_ALIGNMENT_TEXT_START
+        }
+    }
 
+    private fun observeStates() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.majorDetail.collect { result ->
                 when (result) {
@@ -82,8 +100,21 @@ class MajorDetailFragment : Fragment() {
 
 
     private fun showLoading(isLoading: Boolean) {
-        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.apply {
+            loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+
+            if (isLoading) {
+                loadingAnimation.playAnimation()
+                loadingAnimation.animate()
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start()
+            } else {
+                loadingAnimation.pauseAnimation()
+            }
+        }
     }
+
 
     private fun showSnackBar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()

@@ -112,8 +112,21 @@ class RecommendationFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.apply {
+            loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+
+            if (isLoading) {
+                loadingAnimation.playAnimation()
+                loadingAnimation.animate()
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start()
+            } else {
+                loadingAnimation.pauseAnimation()
+            }
+        }
     }
+
 
     private fun showSnackBar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()

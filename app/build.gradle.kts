@@ -97,4 +97,6 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
+    implementation ("com.airbnb.android:lottie:6.1.0")
+
 }

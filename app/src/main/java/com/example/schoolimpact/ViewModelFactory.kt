@@ -12,7 +12,6 @@ import com.example.schoolimpact.ui.main.discover.DiscoverViewModel
 import com.example.schoolimpact.ui.main.profile.ProfileViewModel
 
 class ViewModelFactory private constructor(
-    private val authRepository: AuthRepository,
     private val majorRepository: MajorRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -23,21 +22,10 @@ class ViewModelFactory private constructor(
     private fun <T : ViewModel> createViewModel(modelClass: Class<T>): T? {
         return when {
 
-            modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
-                LoginViewModel(authRepository) as T
-            }
-
-            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
-                RegisterViewModel(authRepository) as T
-            }
-
             modelClass.isAssignableFrom(DiscoverViewModel::class.java) -> {
                 DiscoverViewModel(majorRepository) as T
             }
 
-            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
-                ProfileViewModel(authRepository) as T
-            }
 
 
             else -> null
@@ -49,7 +37,6 @@ class ViewModelFactory private constructor(
         private var instance: ViewModelFactory? = null
         fun getInstance(context: Context): ViewModelFactory = instance ?: synchronized(this) {
             instance ?: ViewModelFactory(
-                Injection.provideAuthRepository(context),
                 Injection.provideMajorRepository(context)
             )
         }.also { instance = it }

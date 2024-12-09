@@ -10,23 +10,25 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.schoolimpact.R
-import com.example.schoolimpact.ViewModelFactory
 import com.example.schoolimpact.databinding.FragmentRegisterBinding
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: RegisterViewModel
+
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -39,7 +41,6 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupViewModel()
         setupListeners()
         observeStates()
 
@@ -53,11 +54,6 @@ class RegisterFragment : Fragment() {
             viewModel.updateEducationLevel(educationLevels[position])
         }
 
-    }
-
-    private fun setupViewModel() {
-        val factory = ViewModelFactory.getInstance(requireActivity())
-        viewModel = ViewModelProvider(this, factory)[RegisterViewModel::class.java]
     }
 
     private fun setupListeners() {
@@ -145,6 +141,7 @@ class RegisterFragment : Fragment() {
 
             is AuthState.Error -> {
                 showLoading(false)
+                showSnackBar(state.error)
                 showErrorAnimations(binding.cardRegisterForm, state.error)
             }
         }
@@ -176,9 +173,21 @@ class RegisterFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
-        binding.btnRegister.isEnabled = !isLoading
+        binding.apply {
+            loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+
+            if (isLoading) {
+                loadingAnimation.playAnimation()
+                loadingAnimation.animate()
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start()
+            } else {
+                loadingAnimation.pauseAnimation()
+            }
+        }
     }
+
 
     private fun showErrorAnimations(view: View, message: String) {
         view.requestFocus()
@@ -191,7 +200,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onResume() {
