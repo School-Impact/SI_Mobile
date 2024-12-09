@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.schoolimpact.data.model.MajorDetailItem
 import com.example.schoolimpact.databinding.FragmentMajorDetailBinding
 import com.example.schoolimpact.utils.Result
@@ -22,6 +23,7 @@ class MajorDetailFragment : Fragment() {
 
 
     private val viewModel: MajorDetailViewModel by viewModels()
+    private lateinit var programAdapter: ProgramAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +39,12 @@ class MajorDetailFragment : Fragment() {
         val majorId = arguments?.getInt("major_id") ?: return
         viewModel.getMajorDetail(majorId)
 
+        programAdapter = ProgramAdapter()
+        binding.rvPrograms.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = programAdapter
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.majorDetail.collect { result ->
                 when (result) {
@@ -45,6 +53,7 @@ class MajorDetailFragment : Fragment() {
                         showLoading(false)
                         showMajorDetail(result.data)
                     }
+
                     is Result.Error -> {
                         showLoading(false)
                         showSnackBar(result.error)
@@ -59,10 +68,12 @@ class MajorDetailFragment : Fragment() {
 
     private fun showMajorDetail(majors: List<MajorDetailItem>) {
         if (majors.isNotEmpty()) {
-            val major = majors.first() // Or handle the list in a RecyclerView, etc.
+            val major = majors.first()
+
             binding.apply {
                 tvMajorName.text = major.name
                 tvMajorDescription.text = major.description
+                programAdapter.submitList(major.programs)
             }
         } else {
             showSnackBar("No details available")

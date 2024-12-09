@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.schoolimpact.R
 import com.example.schoolimpact.data.model.ListMajorItem
-import com.example.schoolimpact.data.model.MlResultData
 import com.example.schoolimpact.databinding.FragmentRecommendationBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,51 +57,53 @@ class RecommendationFragment : Fragment() {
 
     private fun setupRecyclerView() {
         resultAdapter = ResultAdapter { majorItem ->
-            navigateToMajorDetail(majorItem)
+            navigateToMajorDetail(majorItem.id ?: 0)
         }
         binding.rvListMajor.apply {
             adapter = resultAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = GridLayoutManager(requireContext(), 2)
         }
-    }
-
-    private fun showRecommendationResult(result: MlResultData) {
-        val majorItem = ListMajorItem(
-            id = result.userId,
-            name = result.majors,
-        )
-        resultAdapter.submitList(listOf(majorItem))
     }
 
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.interestResult.collectLatest { result ->
-                when (result) {
-                    MlResult.Initial -> Unit
-                    is MlResult.Loading -> showLoading(true)
-                    is MlResult.Success -> {
-                        showLoading(false)
-                        showSnackBar(result.message)
-                        showRecommendationResult(result.data.mlResult)
-                    }
+            launch {
+                viewModel.interestResult.collectLatest { result ->
+                    when (result) {
+                        MlResult.Initial -> Unit
+                        is MlResult.Loading -> showLoading(true)
+                        is MlResult.Success -> {
+                            showLoading(false)
+                            showSnackBar(result.message)
+                        }
 
-                    is MlResult.Error -> {
-                        showLoading(false)
-                        showSnackBar(result.error)
-                    }
+                        is MlResult.Error -> {
+                            showLoading(false)
+                            showSnackBar(result.error)
+                        }
 
+                    }
+                }
+            }
+            launch {
+                viewModel.recommendationHistory.collectLatest { history ->
+                    showLoading(true)
+                    val items = history.map { entity ->
+                        ListMajorItem(
+                            id = entity.majorId,
+                            name = entity.majors
+                        )
+                    }
+                    resultAdapter.submitList(items)
+                    showLoading(false)
                 }
             }
         }
     }
 
-//    private val majorId: Int by lazy {
-//        arguments?.getInt("major_id", 0) ?: 0
-//    }
-
-    private fun navigateToMajorDetail(majorItem: ListMajorItem) {
+    private fun navigateToMajorDetail(majorId: Int) {
         val bundle = Bundle().apply {
-            putInt("major_id", majorItem.id ?: 0)
+            putInt("major_id", majorId)
         }
         findNavController().navigate(
             R.id.action_navigation_recommendation_to_navigation_detail_major,

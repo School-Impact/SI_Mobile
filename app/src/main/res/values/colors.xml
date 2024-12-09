@@ -15,4 +15,7 @@
     <color name="nt_theme_secondary">#BEC6DC</color>
     <color name="nt_theme_onSecondary">#283141</color>
 
+    <color name="bottom_nav_background">#485E92</color> <!-- Blue background -->
+    <color name="bottom_nav_item_tint">#B2DBFF</color> <!-- White text and icons -->
+
 </resources>
