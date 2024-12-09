@@ -1,13 +1,13 @@
 package com.example.schoolimpact
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +40,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_discover, R.id.navigation_profile
             )
         )
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigation_detail_major -> navView.visibility = View.GONE
+                else -> navView.visibility = View.VISIBLE
+            }
+        }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

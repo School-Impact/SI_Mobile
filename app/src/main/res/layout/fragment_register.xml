@@ -28,23 +28,13 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/placeholder_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/placeholder_email"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/email_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/placeholder_email">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/email_input_layout"
@@ -52,19 +42,21 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:hint="@string/placeholder_email"
                         app:endIconMode="clear_text"
                         app:errorIconDrawable="@null"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toStartOf="@id/btn_send_verification"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:startIconDrawable="@drawable/ic_baseline_email_24">
 
                         <EditText
                             android:id="@+id/et_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autofillHints="emailAddress"
-                            android:hint="@string/prompt_email"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:inputType="textEmailAddress|text"
                             android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
@@ -75,46 +67,40 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/verify_email"
+                        style="@style/Widget.Material3.Button"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textSize="12sp"
                         app:cornerRadius="4dp"
-                        app:layout_constraintBottom_toBottomOf="@id/et_email"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/email_input_layout"
-                        app:layout_constraintTop_toTopOf="@id/et_email"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="NotSibling" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                <TextView
-                    android:id="@+id/placeholder_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/placeholder_name"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/email_layout" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_input_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/placeholder_name"
                     app:endIconMode="clear_text"
                     app:errorIconDrawable="@null"
-                    app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/placeholder_name">
+                    app:layout_constraintTop_toBottomOf="@+id/email_layout"
+                    app:startIconDrawable="@drawable/ic_baseline_person_24dp">
 
                     <EditText
                         android:id="@+id/et_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="name"
-                        android:hint="@string/prompt_name"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:inputType="text"
                         android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -124,7 +110,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/education_level"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     app:layout_constraintBottom_toTopOf="@+id/education_level_dropdown_layout"
                     app:layout_constraintStart_toStartOf="parent"
@@ -135,13 +120,14 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/placeholder_education"
                     app:endIconMode="dropdown_menu"
                     app:errorIconDrawable="@null"
-                    app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/placeholder_education_level">
+                    app:layout_constraintTop_toBottomOf="@+id/name_input_layout"
+                    app:startIconDrawable="@drawable/ic_school_24px">
 
                     <AutoCompleteTextView
                         android:id="@+id/education_level_dropdown"
@@ -150,55 +136,36 @@
                         android:clickable="false"
                         android:cursorVisible="false"
                         android:focusable="false"
-                        android:hint="@string/placeholder_education"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/placeholder_phone_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/placeholder_phone_number"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/education_level_dropdown_layout" />
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/phone_number_input_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/placeholder_phone_number"
                     app:endIconMode="clear_text"
                     app:errorIconDrawable="@null"
-                    app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/placeholder_phone_number">
+                    app:layout_constraintTop_toBottomOf="@+id/education_level_dropdown_layout"
+                    app:startIconDrawable="@drawable/ic_call_24px">
 
                     <EditText
                         android:id="@+id/et_phone_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="tel"
-                        android:hint="@string/prompt_phone_number"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:inputType="phone"
                         android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/placeholder_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/placeholder_password"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    app:layout_constraintBottom_toTopOf="@+id/password_input_layout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/phone_number_input_layout" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -206,34 +173,38 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/placeholder_password"
                     app:endIconMode="password_toggle"
                     app:errorIconDrawable="@null"
-                    app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/placeholder_password">
+                    app:layout_constraintTop_toBottomOf="@+id/phone_number_input_layout"
+                    app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
                     <EditText
                         android:id="@+id/et_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="password"
-                        android:hint="@string/prompt_password"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:inputType="textPassword"
                         android:selectAllOnFocus="true"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btn_register"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.Material3.Button"
                     android:layout_marginTop="24dp"
                     android:text="@string/title_sign_up"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     app:cornerRadius="4dp"
+                    android:elevation="4dp"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/password_input_layout" />
