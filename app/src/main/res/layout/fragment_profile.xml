@@ -49,17 +49,18 @@
         app:layout_constraintTop_toBottomOf="@id/tv_username" />
 
     <!-- Edit Button -->
-    <ImageView
+
+    <ImageButton
         android:id="@+id/btn_edit"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:contentDescription="@string/edit_profile"
         android:src="@drawable/ic_edit_24"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_email"
-        app:layout_constraintStart_toEndOf="@+id/tv_email"
-        app:layout_constraintTop_toTopOf="@id/tv_username" />
+        app:layout_constraintBottom_toBottomOf="@+id/tv_username"
+        app:layout_constraintStart_toEndOf="@+id/tv_username"
+        app:layout_constraintTop_toTopOf="@+id/tv_username" />
 
     <View
         android:id="@+id/line1"
