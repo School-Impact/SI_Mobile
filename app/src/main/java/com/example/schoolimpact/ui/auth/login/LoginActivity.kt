@@ -5,44 +5,36 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.schoolimpact.MainActivity
-import com.example.schoolimpact.R
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.databinding.FragmentLoginBinding
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
+import com.example.schoolimpact.ui.auth.register.RegisterActivity
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
-    private var _binding: FragmentLoginBinding? = null
-    private val binding get() = _binding!!
+class LoginActivity : AppCompatActivity() {
+    private lateinit var binding: FragmentLoginBinding
 
     private val viewModel: LoginViewModel by viewModels()
     private lateinit var authDataSource: AuthDataSource
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        authDataSource = AuthDataSource(requireContext())
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = FragmentLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        authDataSource = AuthDataSource(this)
         setupListeners()
         observeStates()
     }
@@ -57,14 +49,14 @@ class LoginFragment : Fragment() {
             }
 
             btnToRegister.setOnClickListener {
-                findNavController().navigate(R.id.action_navigation_login_to_navigation_registration)
+                startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
             }
         }
     }
 
 
     private fun observeStates() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             launch { viewModel.emailState.collectLatest { handleEmailState(it) } }
             launch { viewModel.passwordState.collectLatest { handlePasswordState(it) } }
             launch { viewModel.loginState.collectLatest { handleLoginState(it) } }
@@ -118,7 +110,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToMain() {
-        val intent = Intent(context, MainActivity::class.java).apply {
+        val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         startActivity(intent)
@@ -130,10 +122,7 @@ class LoginFragment : Fragment() {
 
             if (isLoading) {
                 loadingAnimation.playAnimation()
-                loadingAnimation.animate()
-                    .alpha(1f)
-                    .setDuration(200)
-                    .start()
+                loadingAnimation.animate().alpha(1f).setDuration(200).start()
             } else {
                 loadingAnimation.pauseAnimation()
             }
@@ -158,10 +147,5 @@ class LoginFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.resetStates()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

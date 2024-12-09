@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.schoolimpact.MainActivity
 import com.example.schoolimpact.data.preferences.AuthDataSource
-import com.example.schoolimpact.ui.auth.AuthActivity
+import com.example.schoolimpact.ui.onboarding.OnboardingActivity
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
         val intent = if (isLoggedIn) {
             Intent(this@SplashActivity, MainActivity::class.java)
         } else {
-            Intent(this@SplashActivity, AuthActivity::class.java)
+            Intent(this@SplashActivity, OnboardingActivity::class.java)
         }
         startActivity(intent)
         finish()

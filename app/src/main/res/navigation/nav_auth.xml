@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/navigation_login"
-        android:name="com.example.schoolimpact.ui.auth.login.LoginFragment"
+        android:name="com.example.schoolimpact.ui.auth.login.LoginActivity"
         android:label="@string/title_sign_in"
         tools:layout="@layout/fragment_login">
         <action
@@ -19,4 +19,8 @@
         android:name="com.example.schoolimpact.ui.auth.register.RegisterFragment"
         android:label="@string/title_sign_up"
         tools:layout="@layout/fragment_register" />
+    <activity
+        android:id="@+id/navigation_onboarding"
+        android:name="com.example.schoolimpact.ui.onboarding.OnboardingActivity"
+        android:label="OnboardingActivity" />
 </navigation>

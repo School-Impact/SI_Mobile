@@ -1,60 +1,51 @@
 package com.example.schoolimpact.ui.auth.register
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.schoolimpact.R
 import com.example.schoolimpact.databinding.FragmentRegisterBinding
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
+import com.example.schoolimpact.ui.auth.login.LoginActivity
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment() {
+class RegisterActivity : AppCompatActivity() {
 
-    private var _binding: FragmentRegisterBinding? = null
-    private val binding get() = _binding!!
-
+    private lateinit var binding: FragmentRegisterBinding
     private val viewModel: RegisterViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = FragmentRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupListeners()
         observeStates()
 
         val educationLevels = resources.getStringArray(R.array.education_levels)
         val educationLevelAdapter = ArrayAdapter(
-            requireContext(), android.R.layout.simple_dropdown_item_1line, educationLevels
+            this, android.R.layout.simple_dropdown_item_1line, educationLevels
         )
         binding.educationLevelDropdown.setAdapter(educationLevelAdapter)
 
         binding.educationLevelDropdown.setOnItemClickListener { _, _, position, _ ->
             viewModel.updateEducationLevel(educationLevels[position])
         }
-
     }
+
 
     private fun setupListeners() {
         with(binding) {
@@ -82,7 +73,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun observeStates() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             launch { viewModel.nameState.collectLatest { handleNameState(it) } }
             launch { viewModel.emailState.collectLatest { handleEmailState(it) } }
             launch { viewModel.educationLevelState.collectLatest { handleEducationLevelState(it) } }
@@ -136,7 +127,7 @@ class RegisterFragment : Fragment() {
             is AuthState.Success<*> -> {
                 showLoading(false)
                 showSnackBar(state.message)
-                navigateBackToLogin()
+                navigateToLogin()
             }
 
             is AuthState.Error -> {
@@ -168,8 +159,9 @@ class RegisterFragment : Fragment() {
     }
 
 
-    private fun navigateBackToLogin() {
-        findNavController().popBackStack()
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -200,17 +192,12 @@ class RegisterFragment : Fragment() {
     }
 
     private fun showSnackBar(message: String) {
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.resetStates()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

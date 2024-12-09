@@ -14,7 +14,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.schoolimpact.R
 import com.example.schoolimpact.databinding.FragmentProfileBinding
-import com.example.schoolimpact.ui.auth.AuthActivity
+import com.example.schoolimpact.ui.onboarding.OnboardingActivity
 import com.example.schoolimpact.utils.Result
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,7 +82,7 @@ class ProfileFragment : Fragment() {
     private fun logout() {
         viewModel.logout()
 
-        val intent = Intent(requireContext(), AuthActivity::class.java)
+        val intent = Intent(requireContext(), OnboardingActivity::class.java)
         startActivity(intent)
         requireActivity().finishAffinity()
     }

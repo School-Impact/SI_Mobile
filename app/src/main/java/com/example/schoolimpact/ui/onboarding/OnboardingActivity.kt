@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.schoolimpact.databinding.ActivityOnboardingBinding
-import com.example.schoolimpact.ui.auth.AuthActivity
+import com.example.schoolimpact.ui.auth.login.LoginActivity
+import com.example.schoolimpact.ui.auth.register.RegisterActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -31,8 +32,8 @@ class OnboardingActivity : AppCompatActivity() {
 
         TabLayoutMediator(binding.indicator, viewPager) { _, _ -> }.attach()
 
-        binding.btnSignUp.setOnClickListener { navigateToAuthScreen() }
-        binding.btnSignIn.setOnClickListener { navigateToAuthScreen() }
+        binding.btnSignUp.setOnClickListener { navigateToRegister() }
+        binding.btnSignIn.setOnClickListener { navigateToLogin() }
     }
 
     private fun setupAdapter() {
@@ -49,8 +50,11 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToAuthScreen() {
-        startActivity(Intent(this, AuthActivity::class.java))
-        finish()
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+    }
+
+    private fun navigateToRegister() {
+        startActivity(Intent(this, RegisterActivity::class.java))
     }
 }
