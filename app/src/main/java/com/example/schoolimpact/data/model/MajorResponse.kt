@@ -1,8 +1,6 @@
 package com.example.schoolimpact.data.model
 
-import android.bluetooth.BluetoothClass.Device.Major
 import android.os.Parcelable
-import com.example.schoolimpact.data.api.ApiService
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

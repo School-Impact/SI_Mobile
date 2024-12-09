@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private val repository: MajorRepository, private val authDataSource: AuthDataSource
+    private val repository: MajorRepository
 ) : ViewModel() {
     private val _majors = MutableStateFlow<Result<List<ListMajorItem>>>(Result.Loading)
     val majors = _majors.asStateFlow()
