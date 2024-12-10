@@ -1,13 +1,14 @@
 package com.example.schoolimpact.ui.main.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.schoolimpact.data.preferences.AuthDataSource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    authDataSource: AuthDataSource
+) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Home Screen"
-    }
-    val text: LiveData<String> = _text
+    val userFirstName = authDataSource.userName
 }

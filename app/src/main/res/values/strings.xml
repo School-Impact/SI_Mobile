@@ -34,7 +34,7 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="placeholder_program">Program</string>
     <string name="placeholder_title">Title</string>
-    <string name="app_greeting">Selamat Datang</string>
+    <string name="app_greeting">Selamat Datang, </string>
     <string name="content_description_recommendation">Greetings Image</string>
     <string name="content_description_btn_major_detail">button to navigate to major detail</string>
     <string name="content_description_iv_onboarding">Image showing the feature of the app</string>
