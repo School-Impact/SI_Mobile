@@ -7,6 +7,16 @@
     tools:context=".ui.main.recommendation.RecommendationFragment">
 
 
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textview"
         style="@style/TextAppearance.Material3.TitleMedium"
@@ -17,7 +27,7 @@
         android:text="@string/placeholder_ml_title"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout" />
 
 
     <com.google.android.material.textfield.TextInputLayout

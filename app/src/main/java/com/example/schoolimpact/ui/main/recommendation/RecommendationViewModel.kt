@@ -34,7 +34,7 @@ class RecommendationViewModel @Inject constructor(
                 .collectLatest { result ->
                     if (result is MlResult.Success) {
                         val entity = HistoryEntity(
-                            majorId = result.data.mlResult.userId,
+                            majorId = result.data.mlResult.majorId,
                             majors = result.data.mlResult.majors,
                             interest = result.data.mlResult.interest
                         )

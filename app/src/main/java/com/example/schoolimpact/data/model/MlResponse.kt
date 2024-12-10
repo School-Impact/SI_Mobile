@@ -13,6 +13,8 @@ data class MlResultData(
 
     @field:SerializedName("userId") val userId: Int,
 
+    @field:SerializedName("majorId") val majorId: Int,
+
     @field:SerializedName("majors") val majors: String,
 
     @field:SerializedName("interest") val interest: String,

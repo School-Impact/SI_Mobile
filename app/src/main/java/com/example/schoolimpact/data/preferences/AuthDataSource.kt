@@ -29,6 +29,10 @@ class AuthDataSource @Inject constructor(
         }
     }
 
+    val userName = context.AuthDataStore.data.map { preferences ->
+        preferences[USER_NAME_KEY]?.split(" ")?.firstOrNull() ?: ""
+    }
+
     val user = context.AuthDataStore.data.map { preferences ->
         val name = preferences[USER_NAME_KEY]
         val token = preferences[USER_TOKEN_KEY]
