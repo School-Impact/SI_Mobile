@@ -25,7 +25,7 @@
         android:id="@+id/btn_major_detail"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="50dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:contentDescription="@string/content_description_btn_major_detail"
         android:gravity="center"
         android:textAlignment="center"

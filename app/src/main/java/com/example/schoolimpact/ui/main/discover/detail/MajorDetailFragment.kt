@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -46,7 +47,21 @@ class MajorDetailFragment : Fragment() {
         setupAdapter()
         observeStates()
 
+
+        val toolbar = binding.toolbarLayout.toolbar
+        (requireActivity() as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.apply {
+                setDisplayHomeAsUpEnabled(true) // Enable the back button
+                setDisplayShowHomeEnabled(true)
+                title = "Detail Page"
+            }
+        }
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
+
 
     private fun setupAdapter() {
         programAdapter = ProgramAdapter()
