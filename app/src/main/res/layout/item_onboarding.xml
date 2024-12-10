@@ -8,6 +8,7 @@
         android:layout_width="0dp"
         android:layout_height="400dp"
         android:scaleType="centerCrop"
+        android:contentDescription="@string/content_description_iv_onboarding"
         android:src="@drawable/onboarding_image1"
         app:layout_constraintBottom_toTopOf="@id/tvTitle"
         app:layout_constraintEnd_toEndOf="parent"

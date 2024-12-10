@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.register.RegisterFragment">
+    tools:context=".ui.auth.register.RegisterActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:startIconDrawable="@drawable/ic_baseline_email_24">
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -64,10 +64,10 @@
 
                     <Button
                         android:id="@+id/btn_send_verification"
+                        style="@style/Widget.Material3.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/verify_email"
-                        style="@style/Widget.Material3.Button"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textSize="12sp"
                         app:cornerRadius="4dp"
@@ -94,11 +94,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/email_layout"
                     app:startIconDrawable="@drawable/ic_baseline_person_24dp">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="name"
+                        android:contentDescription="@string/name_input_field"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:inputType="text"
@@ -134,11 +135,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:clickable="false"
+                        android:contentDescription="@string/education_dropdown_list"
                         android:cursorVisible="false"
                         android:focusable="false"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        tools:ignore="LabelFor" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,11 +159,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/education_level_dropdown_layout"
                     app:startIconDrawable="@drawable/ic_call_24px">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_phone_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="tel"
+                        android:contentDescription="@string/phone_input_field"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:inputType="phone"
@@ -182,11 +186,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/phone_number_input_layout"
                     app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="password"
+                        android:contentDescription="@string/password_input_field"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:inputType="textPassword"
@@ -197,14 +202,14 @@
 
                 <Button
                     android:id="@+id/btn_register"
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.Material3.Button"
                     android:layout_marginTop="24dp"
-                    android:text="@string/title_sign_up"
-                    app:cornerRadius="4dp"
                     android:elevation="4dp"
+                    android:text="@string/title_sign_up"
                     android:textSize="16sp"
+                    app:cornerRadius="4dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/password_input_layout" />
@@ -217,11 +222,11 @@
         android:id="@+id/loadingAnimation"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:alpha="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:alpha="0"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/loading" />

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.register.RegisterFragment">
+    tools:context=".ui.auth.login.LoginActivity">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -42,11 +42,12 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:startIconDrawable="@drawable/ic_baseline_email_24">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="emailAddress"
+                        android:contentDescription="@string/email_input_field"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:inputType="textEmailAddress|text"
@@ -74,6 +75,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="password"
+                        android:contentDescription="@string/password_input_field"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:inputType="textPassword"

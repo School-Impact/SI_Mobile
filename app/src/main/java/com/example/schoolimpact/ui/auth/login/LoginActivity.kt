@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.schoolimpact.MainActivity
 import com.example.schoolimpact.data.preferences.AuthDataSource
-import com.example.schoolimpact.databinding.FragmentLoginBinding
+import com.example.schoolimpact.databinding.ActivityLoginBinding
 import com.example.schoolimpact.ui.auth.AuthState
 import com.example.schoolimpact.ui.auth.ValidationState
 import com.example.schoolimpact.ui.auth.register.RegisterActivity
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: FragmentLoginBinding
+    private lateinit var binding: ActivityLoginBinding
 
     private val viewModel: LoginViewModel by viewModels()
     private lateinit var authDataSource: AuthDataSource
@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentLoginBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         authDataSource = AuthDataSource(this)
