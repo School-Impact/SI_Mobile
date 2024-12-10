@@ -9,12 +9,12 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textview"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/placeholder_ml_title"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        style="@style/TextAppearance.Material3.TitleMedium"
+        android:text="@string/placeholder_ml_title"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
