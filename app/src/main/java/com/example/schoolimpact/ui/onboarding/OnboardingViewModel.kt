@@ -21,9 +21,9 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
 
     private fun loadOnboardingItems() {
         _onboardingItem.value = listOf(
-            OnboardingItem(R.drawable.onboarding_image1, "Title 1", "Description 1"),
-            OnboardingItem(R.drawable.onboarding_image2, "Title 2", "Description 2"),
-            OnboardingItem(R.drawable.onboarding_image3, "Title 3", "Description 3")
+            OnboardingItem(R.drawable.onboarding_image1, " Rekomendasi Sekolah", "Description 1"),
+            OnboardingItem(R.drawable.onboarding_image2, "Jurusan Sekolah Tingkat Atas", "Description 2"),
+            OnboardingItem(R.drawable.onboarding_image3, "Profil", "Description 3")
         )
     }
 }

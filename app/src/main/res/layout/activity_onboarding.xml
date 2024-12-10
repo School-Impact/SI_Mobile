@@ -30,7 +30,6 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="0dp"
@@ -48,11 +47,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:tabGravity="center"
-        app:tabIndicatorColor="#000000"
-        app:tabSelectedTextColor="#000000"
-        app:tabTextColor="#888888" />
-
+        app:tabGravity="center" />
 
     <LinearLayout
         android:id="@+id/bottom_navigation"
