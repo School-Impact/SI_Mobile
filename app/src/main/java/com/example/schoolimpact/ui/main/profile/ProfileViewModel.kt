@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schoolimpact.data.model.ProfileData
 import com.example.schoolimpact.data.model.UpdateProfileResponse
+import com.example.schoolimpact.data.preferences.SettingsPreferences
 import com.example.schoolimpact.data.repository.UserRepository
 import com.example.schoolimpact.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -15,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository, private val pref: SettingsPreferences
 ) : ViewModel() {
 
     private val _userProfile = MutableStateFlow<Result<ProfileData>>(Result.Loading)
@@ -40,6 +42,16 @@ class ProfileViewModel @Inject constructor(
                 .collect { result ->
                     _updateProfile.value = result
                 }
+        }
+    }
+
+    fun getThemeSettings(): Flow<Boolean> {
+        return pref.getThemeSetting()
+    }
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) {
+        viewModelScope.launch {
+            pref.saveThemeSetting(isDarkModeActive)
         }
     }
 
