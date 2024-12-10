@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.schoolimpact.R
 import com.example.schoolimpact.data.model.MajorDetailItem
 import com.example.schoolimpact.databinding.FragmentMajorDetailBinding
 import com.example.schoolimpact.utils.Result
@@ -52,9 +53,9 @@ class MajorDetailFragment : Fragment() {
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(toolbar)
             supportActionBar?.apply {
-                setDisplayHomeAsUpEnabled(true) // Enable the back button
+                setDisplayHomeAsUpEnabled(true)
                 setDisplayShowHomeEnabled(true)
-                title = "Detail Page"
+                title = getString(R.string.detail_major)
             }
         }
         toolbar.setNavigationOnClickListener {
