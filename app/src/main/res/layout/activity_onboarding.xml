@@ -8,7 +8,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -18,7 +17,6 @@
             android:layout_gravity="start|center_vertical"
             android:padding="16dp"
             android:text="1/3"
-            android:textColor="#000000"
             android:textSize="16sp" />
 
         <Button
@@ -60,28 +58,28 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/theme_primary"
+        android:background="?attr/colorPrimary"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/btn_sign_up"
-            style="@style/Widget.Material3.Button.IconButton.Filled"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/title_sign_up"
             android:textAllCaps="false"
-            android:textColor="@color/white" />
+            android:textColor="?attr/colorOnPrimary" />
 
         <Button
             android:id="@+id/btn_sign_in"
-            style="@style/Widget.Material3.Button.IconButton.Filled"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/title_sign_in"
             android:textAllCaps="false"
-            android:textColor="@color/white" />
+            android:textColor="?attr/colorOnPrimary" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
