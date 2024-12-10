@@ -10,7 +10,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:navigationIconTint="@color/theme_onSecondary"
-        app:title="Detail Page"
+        app:title="@string/app_name"
         app:titleTextColor="?attr/colorOnSecondary" />
 </com.google.android.material.appbar.AppBarLayout>
 

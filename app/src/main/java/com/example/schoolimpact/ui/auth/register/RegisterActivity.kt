@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.schoolimpact.R
 import com.example.schoolimpact.databinding.FragmentRegisterBinding
@@ -32,6 +33,7 @@ class RegisterActivity : AppCompatActivity() {
         binding = FragmentRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupToolbar()
         setupListeners()
         observeStates()
 
@@ -43,6 +45,27 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.educationLevelDropdown.setOnItemClickListener { _, _, position, _ ->
             viewModel.updateEducationLevel(educationLevels[position])
+        }
+    }
+
+    private fun setupToolbar() {
+        val toolbar = binding.toolbarLayout.toolbar
+        (this as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.apply {
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
+                title = getString(R.string.placeholder_register)
+                toolbar.navigationIcon?.setTint(
+                    ContextCompat.getColor(
+                        this@RegisterActivity,
+                        R.color.white
+                    )
+                )
+            }
+        }
+        toolbar.setNavigationOnClickListener {
+            this.onBackPressedDispatcher.onBackPressed()
         }
     }
 

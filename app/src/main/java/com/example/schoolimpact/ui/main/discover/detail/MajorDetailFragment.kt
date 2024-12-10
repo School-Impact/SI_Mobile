@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -45,17 +46,26 @@ class MajorDetailFragment : Fragment() {
         val majorId = arguments?.getInt("major_id") ?: return
         viewModel.getMajorDetail(majorId)
 
+        setupToolbar()
         setupAdapter()
         observeStates()
 
+    }
 
+    private fun setupToolbar() {
         val toolbar = binding.toolbarLayout.toolbar
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(toolbar)
             supportActionBar?.apply {
                 setDisplayHomeAsUpEnabled(true)
                 setDisplayShowHomeEnabled(true)
-                title = getString(R.string.detail_major)
+                title = getString(R.string.placeholder_register)
+                toolbar.navigationIcon?.setTint(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.white
+                    )
+                )
             }
         }
         toolbar.setNavigationOnClickListener {
