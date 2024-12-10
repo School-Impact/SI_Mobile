@@ -19,7 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Major"
-            android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
