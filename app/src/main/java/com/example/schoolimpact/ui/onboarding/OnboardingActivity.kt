@@ -40,6 +40,14 @@ class OnboardingActivity : AppCompatActivity() {
         onboardingAdapter = OnboardingAdapter()
         viewPager = binding.viewPager
         viewPager.adapter = onboardingAdapter
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                // Update page counter (position + 1 because position is 0-based)
+                binding.tvPageCounter.text = "${position + 1}/${onboardingAdapter.itemCount}"
+            }
+        })
     }
 
     private fun setOnboardingItems() {

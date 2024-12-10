@@ -6,12 +6,13 @@
     <ImageView
         android:id="@+id/iv_onboarding"
         android:layout_width="0dp"
-        android:layout_height="400dp"
-        android:scaleType="centerCrop"
+        android:layout_height="350dp"
         android:contentDescription="@string/content_description_iv_onboarding"
+        android:scaleType="centerCrop"
         android:src="@drawable/onboarding_image1"
         app:layout_constraintBottom_toTopOf="@id/tvTitle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,6 +24,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:text="@string/placeholder_title"
+        android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,6 +38,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/placeholder_lorem"
+        android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
