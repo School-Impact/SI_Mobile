@@ -6,56 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.home.HomeFragment">
 
-    <!-- Greeting Text, change to user name -->
+    <!-- Greeting Text -->
     <TextView
         android:id="@+id/tv_greeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Hello, User."
+        android:text="@string/app_greeting"
         android:textColor="#000"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Search Bar -->
-    <EditText
-        android:id="@+id/et_search"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:inputType="text"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:autofillHints="search"
-        android:background="@color/white"
-        android:hint="@string/search"
-        android:importantForAutofill="yes"
-        android:padding="16dp"
-        android:textColorHint="#888"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_greeting" />
-
-    <!-- Discover Section Title -->
     <TextView
-        android:id="@+id/tv_discover"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_sub_greeting"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/discover"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/app_sub_greeting"
         android:textColor="#000"
         android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_search" />
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="@+id/cv_greetings_image"
+        app:layout_constraintStart_toStartOf="@+id/cv_greetings_image"
+        app:layout_constraintTop_toBottomOf="@+id/tv_greeting" />
 
-    <!-- Discover Grid -->
+    <!-- Greetings Image -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_discover"
+        android:id="@+id/cv_greetings_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -63,109 +45,17 @@
         app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_discover">
+        app:layout_constraintTop_toBottomOf="@id/tv_sub_greeting">
 
-        <GridLayout
-            android:id="@+id/gl_discover"
+        <ImageButton
+            android:id="@+id/btn_greeting_image"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:columnCount="4"
-            android:rowCount="2"
-            android:useDefaultMargins="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_discover">
-
-            <!-- Example Icons -->
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_gravity="fill"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/discovery_category"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_category" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_gravity="fill"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/discovery_category"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_category" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_gravity="fill"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/discovery_category"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_category" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_gravity="fill"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/discovery_category"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_category" />
-
-            <!-- Second Row -->
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_gravity="fill"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/discovery_category"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_category" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_gravity="fill"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/discovery_category"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_category" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_gravity="fill"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/discovery_category"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_category" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_gravity="fill"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/discovery_category"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_category" />
-        </GridLayout>
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/rounded_corners"
+            android:contentDescription="@string/content_description_recommendation"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_greetings_image" />
     </androidx.cardview.widget.CardView>
 
     <!-- Recommendation Card -->
@@ -180,7 +70,7 @@
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_discover">
+        app:layout_constraintTop_toBottomOf="@id/cv_greetings_image">
 
         <TextView
             android:layout_width="wrap_content"
