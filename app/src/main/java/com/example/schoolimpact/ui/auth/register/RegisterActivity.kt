@@ -195,9 +195,4 @@ class RegisterActivity : AppCompatActivity() {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.resetStates()
-    }
-
 }
