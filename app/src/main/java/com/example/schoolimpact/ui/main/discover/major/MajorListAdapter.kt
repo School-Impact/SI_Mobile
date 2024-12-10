@@ -11,13 +11,11 @@ import com.example.schoolimpact.databinding.ItemMajorBinding
 
 class MajorListAdapter(
     private val onClick: (ListMajorItem) -> Unit
-) : ListAdapter<ListMajorItem,MajorListAdapter.MajorViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<ListMajorItem, MajorListAdapter.MajorViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MajorViewHolder {
         val binding = ItemMajorBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return MajorViewHolder(binding, onClick)
     }
@@ -27,8 +25,7 @@ class MajorListAdapter(
     }
 
     class MajorViewHolder(
-        private val binding: ItemMajorBinding,
-        private val onClick: (ListMajorItem) -> Unit
+        private val binding: ItemMajorBinding, private val onClick: (ListMajorItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(majorItem: ListMajorItem) {
             binding.apply {
@@ -38,13 +35,16 @@ class MajorListAdapter(
         }
     }
 
+
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListMajorItem>() {
             override fun areItemsTheSame(oldItem: ListMajorItem, newItem: ListMajorItem): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: ListMajorItem, newItem: ListMajorItem): Boolean {
+            override fun areContentsTheSame(
+                oldItem: ListMajorItem, newItem: ListMajorItem
+            ): Boolean {
                 return oldItem == newItem
             }
         }

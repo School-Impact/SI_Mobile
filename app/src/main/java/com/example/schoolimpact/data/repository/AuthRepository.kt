@@ -94,7 +94,7 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun logout() = authDataSource.logout()
+
 
 
     private fun parseHttpException(e: HttpException): AuthState.Error {

@@ -55,7 +55,7 @@ class MajorDetailFragment : Fragment() {
             adapter = programAdapter
         }
         binding.tvMajorDescription.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
             }
             textAlignment = View.TEXT_ALIGNMENT_TEXT_START
@@ -89,7 +89,7 @@ class MajorDetailFragment : Fragment() {
             val major = majors.first()
 
             binding.apply {
-                tvMajorName.text = major.name
+                tvMajorName.text = major.name.trim()
                 tvMajorDescription.text = major.description
                 programAdapter.submitList(major.programs)
             }

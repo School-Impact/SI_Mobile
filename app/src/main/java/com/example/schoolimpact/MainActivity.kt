@@ -35,11 +35,11 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         navController = navHostFragment.navController
 
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_discover, R.id.navigation_profile
-            )
-        )
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.navigation_home, R.id.navigation_discover, R.id.navigation_profile
+//            )
+//        )
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 else -> navView.visibility = View.VISIBLE
             }
         }
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
 

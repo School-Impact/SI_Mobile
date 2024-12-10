@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.schoolimpact.databinding.FragmentDiscoverBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
+
 
 class DiscoverFragment : Fragment() {
     private var _binding: FragmentDiscoverBinding? = null
@@ -24,11 +26,9 @@ class DiscoverFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set up ViewPager2
         val pagerAdapter = MajorPagerAdapter(this)
         binding.viewPager.adapter = pagerAdapter
 
-        // Connect TabLayout with ViewPager2
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "SMA"

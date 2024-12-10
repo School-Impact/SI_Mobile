@@ -6,7 +6,10 @@ import com.example.schoolimpact.data.model.LoginResponse
 import com.example.schoolimpact.data.model.MajorDetailResponse
 import com.example.schoolimpact.data.model.MajorResponse
 import com.example.schoolimpact.data.model.MlResponse
+import com.example.schoolimpact.data.model.ProfileResponse
 import com.example.schoolimpact.data.model.RegisterResponse
+import com.example.schoolimpact.data.model.UpdateProfileResponse
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -36,8 +39,8 @@ interface ApiService {
         @Part("email") email: RequestBody, @Part("password") password: RequestBody,
     ): LoginResponse
 
-    @POST("auth/register")
     @Multipart
+    @POST("auth/register")
     suspend fun verifyEmail(
         @Part("email") email: RequestBody
     ): EmailResponse
@@ -58,5 +61,21 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body interest: InterestRequest
     ): MlResponse
+
+    @GET("user/profile")
+    suspend fun getUserProfile(
+        @Header("Authorization") token: String
+    ): ProfileResponse
+
+    @Multipart
+    @POST("user/update")
+    suspend fun updateUserProfile(
+        @Header("Authorization") token: String,
+        @Part("name") name: RequestBody?,
+        @Part("education") education: RequestBody?,
+        @Part image: MultipartBody.Part?,
+        @Part("phone_number") phoneNumber: RequestBody?,
+        @Part("password") password: RequestBody
+    ): UpdateProfileResponse
 
 }
