@@ -75,7 +75,7 @@
     <!-- Dark Theme Switch -->
 
     <TextView
-        android:id="@+id/switch_theme"
+        android:id="@+id/tv_theme"
         style="@style/TextAppearance.Material3.BodyLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
 
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switchMaterial"
+        android:id="@+id/switch_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
