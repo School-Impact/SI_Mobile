@@ -9,8 +9,10 @@ import android.view.View
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.schoolimpact.MainActivity
+import com.example.schoolimpact.R
 import com.example.schoolimpact.data.preferences.AuthDataSource
 import com.example.schoolimpact.databinding.ActivityLoginBinding
 import com.example.schoolimpact.ui.auth.AuthState
@@ -35,9 +37,34 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         authDataSource = AuthDataSource(this)
+
+        setupToolbar()
         setupListeners()
         observeStates()
+
     }
+
+    private fun setupToolbar() {
+        val toolbar = binding.toolbarLayout.toolbar
+        (this as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.apply {
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
+                title = getString(R.string.placeholder_login)
+                toolbar.navigationIcon?.setTint(
+                    ContextCompat.getColor(
+                        this@LoginActivity,
+                        R.color.white
+                    )
+                )
+            }
+        }
+        toolbar.setNavigationOnClickListener {
+            this.onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
 
     private fun setupListeners() {
         with(binding) {

@@ -37,7 +37,7 @@
         android:layout_margin="16dp"
         app:counterEnabled="true"
         app:counterMaxLength="1000"
-        app:helperText="Please enter at least 1000 words"
+        app:helperText="@string/helper_text_recommendation_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview">

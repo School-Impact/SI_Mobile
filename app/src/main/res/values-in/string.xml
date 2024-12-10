@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">School Impact</string>
+    <string name="title_home">Home</string>
+    <string name="title_discover">Discover</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_sign_in">Sign In</string>
+    <string name="title_sign_up">Sign Up</string>
+
+    <string name="search">Search</string>
+    <string name="discover">Discover</string>
+    <string name="discovery_category">discovery category icon</string>
+    <string name="placeholder_password">Password</string>
+    <string name="placeholder_email">Email</string>
+    <string name="tv_forget_password"><u>Forget Password?</u></string>
+    <string name="tv_no_account_yet">If you don\'t have an account yet?</string>
+    <string name="placeholder_name">Nama</string>
+    <string name="placeholder_education">Tingkat Pendidikan</string>
+    <string name="placeholder_phone_number">Phone Number</string>
+    <string name="verify_email">Verification</string>
+    <string name="log_out">Log Out</string>
+
+    <string name="item_major_name_placeholder">List item</string>
+    <string name="title_major_detail">Major Detail</string>
+    <string name="placeholder_lorem">Lorem ipsumdolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit esse.</string>
+    <string name="title_recommendation">Recommendation</string>
+    <string name="placeholder_btn_result">Submit</string>
+    <string name="placeholder_ml_title">Apa yang kamu suka saat ini?</string>
+    <string name="edit_profile">edit profile\n</string>
+    <string name="user_email">user email</string>
+    <string name="username">username</string>
+    <string name="profile_image">profile image</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="placeholder_program">Program</string>
+    <string name="placeholder_title">Title</string>
+    <string name="app_greeting">Selamat Datang, </string>
+    <string name="content_description_recommendation">Greetings Image</string>
+    <string name="content_description_btn_major_detail">button to navigate to major detail</string>
+    <string name="content_description_iv_onboarding">Image showing the feature of the app</string>
+    <string name="email_input_field">Email input field</string>
+    <string name="password_input_field">Password input field</string>
+    <string name="phone_input_field">Phone input field</string>
+    <string name="education_dropdown_list">Education dropdown list</string>
+    <string name="name_input_field">Name input field</string>
+    <string name="Greetings_Image">Greetings Image</string>
+    <string name="app_sub_greeting">Temukan jurusan yang paling sesuai dengan minat, bakat, dan impianmu. Mari cari pilihan terbaik untuk masa depanmu!</string>
+    <string name="detail_major">Detil Jurusan</string>
+    <string name="school_recommendation">Rekomendasi Sekolah</string>
+    <string name="placeholder_login">Login</string>
+    <string name="placeholder_register">Register</string>
+</resources>
