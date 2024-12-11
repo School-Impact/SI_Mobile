@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -39,6 +40,7 @@ class RecommendationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupToolbar()
         setupRecyclerView()
         setupObservers()
 
@@ -54,7 +56,10 @@ class RecommendationFragment : Fragment() {
 
             }
         }
+    }
 
+
+    private fun setupToolbar() {
         val toolbar = binding.toolbarLayout.toolbar
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(toolbar)
@@ -62,6 +67,12 @@ class RecommendationFragment : Fragment() {
                 setDisplayHomeAsUpEnabled(true)
                 setDisplayShowHomeEnabled(true)
                 title = getString(R.string.school_recommendation)
+                toolbar.navigationIcon?.setTint(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.white
+                    )
+                )
             }
         }
         toolbar.setNavigationOnClickListener {

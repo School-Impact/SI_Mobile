@@ -59,7 +59,7 @@ class MajorDetailFragment : Fragment() {
             supportActionBar?.apply {
                 setDisplayHomeAsUpEnabled(true)
                 setDisplayShowHomeEnabled(true)
-                title = getString(R.string.placeholder_register)
+                title = getString(R.string.detail_major)
                 toolbar.navigationIcon?.setTint(
                     ContextCompat.getColor(
                         requireContext(),
